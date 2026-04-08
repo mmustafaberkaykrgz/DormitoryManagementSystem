@@ -13,8 +13,8 @@
 
     var collectedPct = totalTarget > 0 ? Math.Round((double)(collectedRevenue / totalTarget) * 100, 2) : 0;
 
-    dynamic overdueList = ViewBag.OverdueList;
-    dynamic monthlyData = ViewBag.MonthlyData;
+    var overdueList = ViewBag.OverdueList as IEnumerable<dynamic>;
+    var monthlyData = ViewBag.MonthlyData as IEnumerable<dynamic>;
 }
 
 <style>
@@ -157,16 +157,22 @@
             <div class="chart-wrapper">
                 <canvas id="revenueChart" height="200"></canvas>
                 <div class="d-flex gap-3 mt-2 justify-content-center" style="font-size:0.75rem;">
-                    <span><span style="display:inline-block;width:12px;height:12px;background:#27ae60;border-radius:3px;margin-right:4px;"></span>Accommodation</span>
-                    <span><span style="display:inline-block;width:12px;height:12px;background:#e67e22;border-radius:3px;margin-right:4px;"></span>Misc Fees</span>
+                    <span><span style="display:inline-block;width:12px;height:12px;background:#27ae60;border-radius:3px;margin-right:4px;"></span>Paid</span>
+                    <span><span style="display:inline-block;width:12px;height:12px;background:#e67e22;border-radius:3px;margin-right:4px;"></span>Unpaid</span>
                 </div>
             </div>
         </div>
         <!-- Overdue Table -->
         <div class="col-md-6">
             <div class="overdue-panel">
-                <div class="panel-title">Overdue Payments List</div>
-                @if (overdueList != null && ((IEnumerable<dynamic>)overdueList).Any())
+                <div class="panel-title d-flex justify-content-between align-items-center">
+                    <span>Overdue Payments List</span>
+                    @if (ViewBag.OverdueCount != null)
+                    {
+                        <span class="badge bg-secondary" style="font-size:0.7rem;">Total: @ViewBag.OverdueCount</span>
+                    }
+                </div>
+                @if (overdueList != null && overdueList.Any())
                 {
                     <table class="table overdue-table table-borderless mb-0">
                         <thead>
@@ -175,41 +181,41 @@
                                 <th>Room</th>
                                 <th>Type</th>
                                 <th>Amount (₺)</th>
-                                <th>Days Overdue</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in overdueList)
                             {
-                                var days = (int)item.DaysOverdue;
+                                int days = (int)item.DaysOverdue;
                                 var badgeClass = days == 0 ? "badge-pending" : days < 30 ? "badge-viewed" : "badge-overdue";
-                                var badgeLabel = days == 0 ? "Pending" : days < 30 ? "Viewed" : "Overdue";
+                                var badgeLabel = days == 0 ? "Pending" : days < 30 ? "Late" : "Critical";
                                 <tr>
                                     <td>
                                         <div class="student-name">@item.StudentName</div>
-                                        <div class="update-date">Last Update: @((DateTime)item.DueDate).ToString("MMM d, yyyy")</div>
+                                        <div class="update-date">Due: @(((DateTime)item.DueDate).ToString("dd/MM/yyyy"))</div>
                                     </td>
                                     <td>@item.Room</td>
-                                    <td style="font-size:0.78rem;">@item.Type</td>
-                                    <td class="fw-700">₺@((decimal)item.Amount).ToString("N0")</td>
-                                    <td><span class="badge @badgeClass rounded-pill px-2">@badgeLabel</span></td>
+                                    <td style="font-size:0.75rem;">@item.Type</td>
+                                    <td class="fw-700">₺@(((decimal)item.Amount).ToString("N0"))</td>
+                                    <td><span class="badge @badgeClass rounded-pill px-2">@badgeLabel (@days d)</span></td>
                                     <td>
-                                        <a asp-controller="Dues" asp-action="Index" class="btn btn-sm btn-light p-1" title="View">
-                                            <i class="bi bi-send" style="font-size:0.9rem;"></i>
+                                        <a href="/Dues/Edit/@item.DuesId" class="btn btn-sm btn-light p-1" title="View/Edit">
+                                            <i class="bi bi-pencil-square" style="font-size:0.9rem;"></i>
                                         </a>
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-                    <div class="data-date text-end mt-2">Data Current to: @dataAsOf</div>
                 }
                 else
                 {
-                    <div class="text-center py-4 text-muted">
-                        <i class="bi bi-check-circle fs-2"></i>
-                        <p class="mt-2">No overdue payments!</p>
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-clipboard-check fs-1 opacity-25"></i>
+                        <p class="mt-2 fw-600">No overdue payments found.</p>
+                        <small>Checked at @DateTime.Now.ToString("HH:mm:ss")</small>
                     </div>
                 }
             </div>
@@ -258,15 +264,15 @@
                 <button class="btn btn-secondary btn-refresh" onclick="location.reload()">
                     <i class="bi bi-arrow-clockwise me-1"></i>Refresh
                 </button>
-                <button class="btn btn-report" onclick="generateReport()">
+                <a asp-controller="Reports" asp-action="PrintReport" target="_blank" class="btn btn-report">
                     Generate Summary Report <i class="bi bi-chevron-right"></i>
-                </button>
-                <button class="btn btn-export btn-outline-secondary" onclick="exportPDF()">
+                </a>
+                <a asp-controller="Reports" asp-action="PrintReport" target="_blank" class="btn btn-export btn-outline-secondary">
                     <i class="bi bi-filetype-pdf me-1"></i>PDF Export
-                </button>
-                <button class="btn btn-export btn-outline-success" onclick="exportExcel()">
+                </a>
+                <a asp-controller="Reports" asp-action="ExportExcel" class="btn btn-export btn-outline-success">
                     <i class="bi bi-file-earmark-excel me-1"></i>Excel Export
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -278,8 +284,8 @@
     // Monthly Chart Data from server
     var monthlyData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(monthlyData));
     var labels = monthlyData.map(d => d.Month);
-    var accommodation = monthlyData.map(d => Number(d.Accommodation));
-    var miscFees = monthlyData.map(d => Number(d.MiscFees));
+    var paidData = monthlyData.map(d => Number(d.Paid));
+    var unpaidData = monthlyData.map(d => Number(d.Unpaid));
 
     var ctx = document.getElementById('revenueChart').getContext('2d');
     new Chart(ctx, {
@@ -288,14 +294,14 @@
             labels: labels,
             datasets: [
                 {
-                    label: 'Accommodation',
-                    data: accommodation,
+                    label: 'Paid',
+                    data: paidData,
                     backgroundColor: 'rgba(39,174,96,0.75)',
                     borderRadius: 6
                 },
                 {
-                    label: 'Misc Fees',
-                    data: miscFees,
+                    label: 'Unpaid',
+                    data: unpaidData,
                     backgroundColor: 'rgba(230,126,34,0.75)',
                     borderRadius: 6
                 }

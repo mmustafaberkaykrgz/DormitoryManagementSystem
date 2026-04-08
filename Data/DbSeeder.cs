@@ -6,9 +6,7 @@ namespace DormitoryManagementSystem.Data
     {
         public static void Seed(AppDbContext context)
         {
-            // Veritabanının oluşturulduğundan emin ol
-            // Recreate database with new schema (Name, Surname, NationalId, Email columns)
-            context.Database.EnsureDeleted();
+            // Veritabanı yoksa oluştur, varsa dokunma
             context.Database.EnsureCreated();
 
             // Eğer veritabanında hiç "Role" yoksa, 3 ana rolü ekle

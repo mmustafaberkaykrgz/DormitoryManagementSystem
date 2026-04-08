@@ -14,23 +14,34 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
+        :root {
+            --sidebar-bg: rgba(255, 255, 255, 0.1);
+            --sidebar-blur: 20px;
+            --sidebar-border: rgba(255, 255, 255, 0.2);
+            --surface-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #2c3e50;
+            --accent-primary: #1cb5e0;
+        }
+
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #f6f8fd 0%, #f1f5f9 100%);
+            background: @(ViewData["IsHomePage"] != null ? "#0f1a2e" : "linear-gradient(135deg, #f6f8fd 0%, #f1f5f9 100%)");
             background-attachment: fixed;
-            color: #2c3e50;
+            color: @(ViewData["IsHomePage"] != null ? "#eee" : "#2c3e50");
             overflow-x: hidden;
+            min-height: 100vh;
         }
         
-        /* Premium Fixed Sidebar */
+        /* Premium Glass Sidebar */
         .sidebar {
             min-width: 260px;
             max-width: 260px;
             min-height: 100vh;
-            background: rgba(255, 255, 255, 0.95);
+            background: @(ViewData["IsHomePage"] != null ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.8)");
             backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 4px 0 25px rgba(0,0,0,0.03);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 4px 0 25px rgba(0,0,0,0.05);
             position: fixed;
             top: 0; left: 0;
             padding-top: 30px;
@@ -41,7 +52,7 @@
 
         .sidebar-brand {
             font-weight: 800;
-            background: linear-gradient(45deg, #1cb5e0, #000046);
+            background: linear-gradient(45deg, #4fc3f7, #2196f3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-size: 1.6rem;
@@ -53,7 +64,7 @@
         .nav-item { margin: 5px 15px; list-style: none; }
         .nav-link {
             font-weight: 600;
-            color: #6c7a89 !important;
+            color: @(ViewData["IsHomePage"] != null ? "#a3b1c6" : "#6c7a89") !important;
             padding: 12px 20px;
             border-radius: 12px;
             transition: all 0.3s ease;
@@ -62,8 +73,8 @@
         }
         .nav-link i { font-size: 1.2rem; margin-right: 12px; }
         .nav-link:hover, .nav-link.active {
-            background: #f0f4f8;
-            color: #1cb5e0 !important;
+            background: rgba(255, 255, 255, 0.1);
+            color: #4fc3f7 !important;
             transform: translateX(5px);
         }
 
@@ -73,6 +84,8 @@
             margin-left: 260px;
             min-height: 100vh;
             padding: 40px;
+            position: relative;
+            z-index: 2;
         }
 
         .page-transition { animation: fadeInDown 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
@@ -84,17 +97,35 @@
 
         .btn { border-radius: 12px; font-weight: 600; transition: all 0.3s ease; }
         .btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-        .table { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 15px; overflow: hidden; margin-bottom: 0;}
-        .table tbody tr { transition: all 0.3s ease; }
-        .table tbody tr:hover { background-color: rgba(255,255,255,1); transform: scale(1.01); box-shadow: 0 5px 15px rgba(0,0,0,0.05); z-index: 10; position: relative; }
         
-        .form-control, .form-select { border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.7); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .form-control:focus, .form-select:focus { border-color: #1cb5e0; background: #fff; box-shadow: 0 0 0 4px rgba(28, 181, 224, 0.15); transform: translateY(-2px); }
+        .table { 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px); 
+            border-radius: 15px; 
+            overflow: hidden; 
+            margin-bottom: 0;
+            color: inherit;
+        }
         
-        .card { transition: all 0.4s ease; border: none; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px); }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .card { 
+            transition: all 0.4s ease; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            background: rgba(255, 255, 255, 0.07); 
+            backdrop-filter: blur(15px); 
+            color: inherit;
+        }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
 
-        footer { margin-top: 50px; background: rgba(255,255,255,0.5); backdrop-filter: blur(10px); color: #6c7a89; padding: 25px 0; border-top: 1px solid rgba(0,0,0,0.05); border-radius: 20px; font-weight: 500;}
+        footer { 
+            margin-top: 50px; 
+            background: rgba(255,255,255,0.05); 
+            backdrop-filter: blur(10px); 
+            color: #64748b; 
+            padding: 25px 0; 
+            border-top: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 20px; 
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
