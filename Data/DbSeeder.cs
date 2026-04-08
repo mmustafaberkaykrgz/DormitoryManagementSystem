@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using DormitoryManagementSystem.Models;
 
 namespace DormitoryManagementSystem.Data
@@ -6,7 +7,8 @@ namespace DormitoryManagementSystem.Data
     {
         public static void Seed(AppDbContext context)
         {
-            // Veritabanı yoksa oluştur, varsa dokunma
+            // Veritabanı yoksa oluşturur, var olan veriler korunur
+            // context.Database.EnsureDeleted(); // (Verilerin silinmemesi için iptal edildi)
             context.Database.EnsureCreated();
 
             // Eğer veritabanında hiç "Role" yoksa, 3 ana rolü ekle
