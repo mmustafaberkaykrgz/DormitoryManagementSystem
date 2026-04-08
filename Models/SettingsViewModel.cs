@@ -21,8 +21,14 @@ namespace DormitoryManagementSystem.Models
         public string DormitoryAddress { get; set; } = string.Empty;
 
         [Required]
-        [Display(Name = "Contact Info (Phone/Email)")]
-        public string ContactInfo { get; set; } = string.Empty;
+        [Phone]
+        [Display(Name = "Contact Phone")]
+        public string ContactPhone { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Contact Email")]
+        public string ContactEmail { get; set; } = string.Empty;
 
         [Required]
         [Display(Name = "Default Monthly Due (₺)")]

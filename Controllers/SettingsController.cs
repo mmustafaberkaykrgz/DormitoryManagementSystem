@@ -30,7 +30,8 @@ namespace DormitoryManagementSystem.Controllers
                 var dict = await _context.SystemSettings.ToDictionaryAsync(s => s.KeyName, s => s.Value);
                 viewModel.GlobalSettings.DormitoryName = dict.GetValueOrDefault("DormitoryName", "My Dorm");
                 viewModel.GlobalSettings.DormitoryAddress = dict.GetValueOrDefault("DormitoryAddress", "");
-                viewModel.GlobalSettings.ContactInfo = dict.GetValueOrDefault("ContactInfo", "");
+                viewModel.GlobalSettings.ContactPhone = dict.GetValueOrDefault("ContactPhone", "");
+                viewModel.GlobalSettings.ContactEmail = dict.GetValueOrDefault("ContactEmail", "");
                 viewModel.GlobalSettings.DefaultMonthlyDue = decimal.TryParse(dict.GetValueOrDefault("DefaultMonthlyDue", "0"), out var d) ? d : 0;
                 viewModel.GlobalSettings.LatePenaltyFee = decimal.TryParse(dict.GetValueOrDefault("LatePenaltyFee", "0"), out var p) ? p : 0;
 
@@ -57,7 +58,8 @@ namespace DormitoryManagementSystem.Controllers
             {
                 { "DormitoryName", model.GlobalSettings.DormitoryName },
                 { "DormitoryAddress", model.GlobalSettings.DormitoryAddress },
-                { "ContactInfo", model.GlobalSettings.ContactInfo },
+                { "ContactPhone", model.GlobalSettings.ContactPhone },
+                { "ContactEmail", model.GlobalSettings.ContactEmail },
                 { "DefaultMonthlyDue", model.GlobalSettings.DefaultMonthlyDue.ToString() },
                 { "LatePenaltyFee", model.GlobalSettings.LatePenaltyFee.ToString() }
             };

@@ -71,12 +71,16 @@
                                 <input asp-for="GlobalSettings.DormitoryName" class="form-control bg-light border-1" />
                             </div>
                             <div class="col-md-6">
-                                <label asp-for="GlobalSettings.ContactInfo" class="form-label text-secondary fw-semibold"></label>
-                                <input asp-for="GlobalSettings.ContactInfo" class="form-control bg-light border-1" placeholder="Phone or Email" />
+                                <label asp-for="GlobalSettings.ContactPhone" class="form-label text-secondary fw-semibold"></label>
+                                <input asp-for="GlobalSettings.ContactPhone" class="form-control bg-light border-1" placeholder="+90 5XX XXX XX XX" />
                             </div>
                             <div class="col-12">
                                 <label asp-for="GlobalSettings.DormitoryAddress" class="form-label text-secondary fw-semibold"></label>
                                 <textarea asp-for="GlobalSettings.DormitoryAddress" class="form-control bg-light border-1" rows="2"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="GlobalSettings.ContactEmail" class="form-label text-secondary fw-semibold"></label>
+                                <input asp-for="GlobalSettings.ContactEmail" class="form-control bg-light border-1" placeholder="dormitory@example.com" />
                             </div>
                             
                             <div class="col-12 mt-4"><hr class="text-muted"/></div>
