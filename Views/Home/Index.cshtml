@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Executive Dashboard";
+    ViewData["Title"] = "Welcome";
     ViewData["IsHomePage"] = true;
 }
 
@@ -54,7 +54,7 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding-top: 2rem; /* Boşluk azaltıldı */
+        padding-top: 2rem;
         padding-bottom: 5rem;
         min-height: 85vh;
         position: relative;
@@ -92,33 +92,6 @@
         pointer-events: none;
     }
 
-    /* KPI Row */
-    .kpi-row {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 24px;
-        width: 100%;
-        margin-top: 2.5rem;
-    }
-
-    .kpi-card {
-        padding: 28px;
-        border-bottom: 5px solid transparent;
-        color: #fff;
-    }
-    .kpi-card .card-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 2px; margin-bottom: 12px; }
-    .kpi-card .card-value { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 10px; }
-    
-    .border-blue { border-bottom-color: #2196f3; }
-    .border-green { border-bottom-color: #4caf50; }
-    .border-red { border-bottom-color: #f44336; }
-    .border-amber { border-bottom-color: #ffc107; }
-
-    .text-blue { color: #4fc3f7; }
-    .text-green { color: #81c784; }
-    .text-red { color: #ff8a80; }
-    .text-amber { color: #ffd54f; }
-
     @@keyframes float {
         0%, 100% { transform: translateY(0px) rotate(0.2deg); }
         50% { transform: translateY(-25px) rotate(-0.2deg); }
@@ -129,6 +102,14 @@
 
 <canvas id="starCanvas"></canvas>
 <div class="nebula"></div>
+
+<!-- Yeni Eklenen Navbar (Logolu) -->
+<nav class="navbar navbar-dark bg-transparent pt-4 w-100 position-absolute top-0 start-0 px-4" style="z-index: 1000;">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="~/assets/Dorm_logo.png" alt="Logo" height="45" class="me-2">
+        <span class="fs-4 fw-bold" style="color: #fff; letter-spacing: 1px;">Dormitory Premium</span>
+    </a>
+</nav>
 
 <div class="container">
     
