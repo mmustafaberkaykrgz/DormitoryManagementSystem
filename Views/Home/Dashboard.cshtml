@@ -1,137 +1,308 @@
 @{
-    ViewData["Title"] = "Executive Dashboard";
+    ViewData["Title"] = "Dashboard - Overview";
 }
 
 <style>
-    /* Premium Interactive Design System */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4);
-        transition: all 0.3s ease;
-        color: #fff;
+    /* Vibrant & Clean Modern Design System */
+    .dash-container {
+        padding: 20px 5px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
     
-    .gradient-text {
-        background: linear-gradient(135deg, #fff 0%, #4fc3f7 50%, #81c784 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 800;
-        letter-spacing: -1.5px;
+    .dash-title {
+        font-size: 1.8rem;
+        color: #1e293b;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+    
+    /* Box Definitions - For Non Flip Cards (Row 2) */
+    .flat-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(149, 157, 165, 0.15);
+        border: none;
+        text-align: center;
+        padding: 30px 15px;
+        position: relative;
+        transition: all 0.3s;
+    }
+    .flat-card:hover {
+        transform: translateY(-4px); 
+        box-shadow: 0 12px 32px rgba(149, 157, 165, 0.25); 
     }
 
-    /* Balanced Vertical Layout */
-    .dashboard-container {
+    /* 3D FLIP CARDS CSS (Sadece İlk 4 Kart İçin) */
+    .flip-card-container {
+        background-color: transparent;
+        perspective: 1000px;
+        min-height: 160px;
+        display: block;
+    }
+    
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        /* Çok tatlı, elastik bir 180 derece dönüş animasyonu */
+        transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        transform-style: preserve-3d;
+    }
+    
+    /* Fareyle üzerine gelindiğinde Y ekseninde (soldan sağa) 180 derece dönüş (Ters Çevirme) */
+    .flip-card-container:hover .flip-card-inner {
+        transform: rotateY(180deg);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); 
+    }
+    
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(149, 157, 165, 0.15);
+        border: none;
+        text-align: center;
+        padding: 30px 15px;
+        top: 0;
+        left: 0;
+    }
+    
+    /* Ön Yüz Beyaz Kalsın */
+    .flip-card-front {
+        background: #ffffff;
+    }
+    
+    /* Arka Yüz: Siyah yerine Canlı, Enerjik ve Rengarenk Bir Degrade */
+    .flip-card-back {
+        /* Sıcak, canlı ve modern bir geçiş */
+        background: linear-gradient(135deg, #8A2387, #E94057, #F27121);
+        transform: rotateY(180deg);
+        color: #ffffff;
         display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
-        text-align: center;
-        padding-top: 1rem;
-        padding-bottom: 5rem;
-        min-height: 85vh;
-        position: relative;
+        /* Kartın kendisinden sızan neon rengarenk gölge */
+        box-shadow: 0 20px 40px rgba(233, 64, 87, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
-
-    /* KPI Row */
-    .kpi-row {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 24px;
-        width: 100%;
-        margin-top: 1rem;
-    }
-
-    .kpi-card {
-        padding: 28px;
-        border-bottom: 5px solid transparent;
-        color: #fff;
-    }
-    .kpi-card .card-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 2px; margin-bottom: 12px; }
-    .kpi-card .card-value { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 10px; }
     
-    .border-blue { border-bottom-color: #2196f3; }
-    .border-green { border-bottom-color: #4caf50; }
-    .border-red { border-bottom-color: #f44336; }
-    .border-amber { border-bottom-color: #ffc107; }
+    /* Renkli Gölgeli Yazılar (Bu ne siyah dediniz, renk cümbüşü yaptık!) */
+    .fc-back-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #ffffff;
+        /* Rengarenk metin gölgesi: 3D Mor + Parlak Turuncu Glow */
+        text-shadow: 3px 3px 0px rgba(138, 35, 135, 0.7), -1px -1px 20px rgba(242, 113, 33, 1); 
+        margin-bottom: 12px;
+        letter-spacing: 0.5px;
+    }
+    .fc-back-desc {
+        font-size: 0.95rem;
+        color: #ffffff;
+        font-weight: 500;
+        /* Okunurluk için sıcak bordo/mor tonlarında arka metin gölgesi */
+        text-shadow: 1px 2px 4px rgba(138, 35, 135, 0.9);
+        line-height: 1.5;
+        padding: 0 10px;
+    }
 
-    .text-blue { color: #4fc3f7; }
-    .text-green { color: #81c784; }
-    .text-red { color: #ff8a80; }
-    .text-amber { color: #ffd54f; }
+    /* Colored top stripes */
+    .flat-card::before, .flip-card-front::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 6px;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+    
+    .stripe-blue::before   { background-color: #3b82f6; } 
+    .stripe-green::before  { background-color: #10b981; } 
+    .stripe-orange::before { background-color: #f59e0b; } 
+    .stripe-red::before    { background-color: #ef4444; } 
+    .stripe-darkred::before{ background-color: #b91c1c; } 
+
+    /* İçerik Düzenleri */
+    .fc-title { font-size: 1.05rem; color: #475569; margin-bottom: 12px; font-weight: 600; }
+    .fc-value { font-size: 2.6rem; color: #0f172a; font-weight: 700; margin-bottom: 8px; }
+    .fc-sub { font-size: 0.95rem; color: #94a3b8; }
+
+    .card-row-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 30px; }
+    .card-row-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-bottom: 30px; }
+
+    /* Grafik Kutuları */
+    .chart-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(149, 157, 165, 0.15);
+        border: none;
+        padding: 24px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .chart-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #38bdf8;
+        text-align: center;
+        margin-bottom: 24px;
+        letter-spacing: -0.3px;
+    }
+    .chart-body { flex: 1; position: relative; min-height: 280px; }
 </style>
 
-<div class="container-fluid px-4">
-    <div class="dashboard-container animate__animated animate__fadeIn">
-        
-        <div class="w-100 text-start mb-4">
-            <h1 class="display-5 gradient-text mb-0">System Overview</h1>
-            <p class="text-muted">Real-time dormitory metrics and analytics.</p>
-        </div>
+<div class="dash-container animate__animated animate__fadeIn">
+    <h1 class="dash-title">Dashboard - Overview</h1>
 
-        <div class="kpi-row">
-            @if (User.IsInRole("Student"))
-            {
-                <div class="glass-card kpi-card border-blue" style="grid-column: span 2;">
-                    <div class="card-label">Identity</div>
-                    <h2 class="card-value text-blue">@ViewBag.StudentName</h2>
-                    <div class="card-sub">Active Resident Gateway</div>
-                </div>
-                <div class="glass-card kpi-card border-amber">
-                    <div class="card-label">Room Allocation</div>
-                    <div class="card-value text-amber">@ViewBag.RoomNumber</div>
-                    <div class="card-sub">Assigned Enclave</div>
-                </div>
-            }
-            else
-            {
-                <div class="glass-card kpi-card border-blue">
-                    <div class="card-label">Live Occupancy</div>
-                    <div class="card-value text-blue">@ViewBag.TotalStudents</div>
-                    <div class="card-sub">of @ViewBag.TotalCapacity Total Beds</div>
-                </div>
-                <div class="glass-card kpi-card border-green">
-                    <div class="card-label">Collected Revenue</div>
-                    <div class="card-value text-green">₺@ViewBag.TotalPaid</div>
-                    <div class="card-sub">Monthly Collections</div>
-                </div>
-                <div class="glass-card kpi-card border-red">
-                    <div class="card-label">Total Arrears</div>
-                    <div class="card-value text-red">₺@ViewBag.TotalUnpaid</div>
-                    <div class="card-sub">Outstanding Ledger</div>
-                </div>
-                <div class="glass-card kpi-card border-amber">
-                    <div class="card-label">Active Tickets</div>
-                    <div class="card-value text-amber">@ViewBag.PendingTickets</div>
-                    <div class="card-sub">Service Queue</div>
-                </div>
-            }
-        </div>
-
-        @if (!User.IsInRole("Student"))
-        {
-            <div class="row g-4 mt-4 w-100">
-                <div class="col-lg-7">
-                    <div class="glass-card p-4 border-0 h-100">
-                        <h5 class="fw-bold mb-4 gradient-text">Analytic Insights</h5>
-                        <div style="height: 300px;">
-                            <canvas id="financeChart"></canvas>
-                        </div>
+    @if (User.IsInRole("Student"))
+    {
+        <div class="card-row-4">
+            <div class="flip-card-container">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front stripe-blue">
+                        <div class="fc-title">Identity</div>
+                        <div class="fc-value" style="font-size: 1.8rem; margin-top:15px;">@ViewBag.StudentName</div>
+                        <div class="fc-sub">Active Resident</div>
                     </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="glass-card p-4 border-0 h-100">
-                        <h5 class="fw-bold mb-4 gradient-text">Maintenance Pulse</h5>
-                        <div style="height: 300px;">
-                            <canvas id="maintenanceChart"></canvas>
-                        </div>
+                    <div class="flip-card-back">
+                        <div class="fc-back-title">System Record</div>
+                        <div class="fc-back-desc">Your personal student information and current housing status.</div>
                     </div>
                 </div>
             </div>
-        }
-    </div>
+            
+            <div class="flip-card-container">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front stripe-green">
+                        <div class="fc-title">Assigned Unit</div>
+                        <div class="fc-value">@ViewBag.RoomNumber</div>
+                        <div class="fc-sub">Room Allocation</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="fc-back-title">Room Allocation</div>
+                        <div class="fc-back-desc">The specific room number officially assigned to you for your stay.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-row-2">
+            <div class="flat-card stripe-green">
+                <div class="fc-title">Payments Made</div>
+                <div class="fc-value">@(((decimal)(ViewBag.TotalPaid ?? 0m)).ToString("N0")) TL</div>
+                <div class="fc-sub">Successfully Processed</div>
+            </div>
+            <div class="flat-card stripe-darkred">
+                <div class="fc-title">Outstanding Balance</div>
+                <div class="fc-value">@(((decimal)(ViewBag.TotalUnpaid ?? 0m)).ToString("N0")) TL</div>
+                <div class="fc-sub">Payments Pending</div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Admin / Staff Layout (KARTLAR BURADA TERS DÖNER) -->
+        <div class="card-row-4">
+            
+            <!-- Kart 1: Units -->
+            <div class="flip-card-container">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front stripe-blue">
+                        <div class="fc-title">Units Registered</div>
+                        <div class="fc-value">@ViewBag.TotalCapacity</div>
+                        <div class="fc-sub">Total Units (Beds)</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="fc-back-title">Capacity Size</div>
+                        <div class="fc-back-desc">Displays the total physical bed capacity and unit volume defined in the system.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kart 2: Residents -->
+            <div class="flip-card-container">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front stripe-green">
+                        <div class="fc-title">Current Residents</div>
+                        <div class="fc-value">@ViewBag.TotalStudents</div>
+                        <div class="fc-sub">Active Students</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="fc-back-title">Registered Students</div>
+                        <div class="fc-back-desc">The total count of students currently and actively residing in the facility.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kart 3: Capacity -->
+            <div class="flip-card-container">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front stripe-orange">
+                        <div class="fc-title">Capacity</div>
+                        <div class="fc-value">@ViewBag.TotalStudents / @ViewBag.TotalCapacity</div>
+                        <div class="fc-sub">Beds Occupied</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="fc-back-title">Occupancy Rate</div>
+                        <div class="fc-back-desc">Reflects the active bed occupancy percentage relative to the total available capacity.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kart 4: Requests -->
+            <div class="flip-card-container">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front stripe-red">
+                        <div class="fc-title">Pending Requests</div>
+                        <div class="fc-value">@ViewBag.PendingTickets</div>
+                        <div class="fc-sub">Open Maintenance</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="fc-back-title">Pending Maintenance</div>
+                        <div class="fc-back-desc">Unresolved maintenance and repair requests submitted by the residents.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-row-2">
+            <div class="flat-card stripe-green">
+                <div class="fc-title">Revenue Collected</div>
+                <div class="fc-value">@(((decimal)(ViewBag.TotalPaid ?? 0m)).ToString("N0")) TL</div>
+                <div class="fc-sub">Payments Received</div>
+            </div>
+            <div class="flat-card stripe-darkred">
+                <div class="fc-title">Revenue Outstanding</div>
+                <div class="fc-value">@(((decimal)(ViewBag.TotalUnpaid ?? 0m)).ToString("N0")) TL</div>
+                <div class="fc-sub">Payments Pending</div>
+            </div>
+        </div>
+
+        <!-- GRAFİKLER BÖLÜMÜ -->
+        <div class="row g-4 mt-1 mb-4 w-100">
+            <div class="col-lg-6">
+                <div class="chart-card">
+                    <div class="chart-title">Analytic Insights</div>
+                    <div class="chart-body">
+                        <canvas id="financeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="chart-card">
+                    <div class="chart-title">Maintenance Pulse</div>
+                    <div class="chart-body">
+                        <canvas id="maintenanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @section Scripts {
@@ -140,6 +311,7 @@
         @if (!User.IsInRole("Student"))
         {
             <text>
+            /* DOUGHNUT CHART - Finans */
             const ctxFinance = document.getElementById('financeChart').getContext('2d');
             new Chart(ctxFinance, {
                 type: 'doughnut',
@@ -147,21 +319,31 @@
                     labels: ['Paid', 'Overdue'],
                     datasets: [{
                         data: [@ViewBag.TotalPaid, @ViewBag.TotalUnpaid],
-                        backgroundColor: ['#81c784', '#ff8a80'],
-                        borderColor: 'transparent',
-                        hoverOffset: 30
+                        backgroundColor: ['#68d391', '#fc8181'], 
+                        borderWidth: 0,
+                        hoverOffset: 10
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { 
-                        legend: { position: 'right', labels: { color: '#cfd8dc', padding: 20, font: { family: 'Outfit', size: 14 } } } 
+                        legend: { 
+                            position: 'right', 
+                            labels: {
+                                color: '#94a3b8',
+                                usePointStyle: true,
+                                boxWidth: 15,
+                                padding: 25,
+                                font: { family: 'sans-serif', size: 13, weight: '500' } 
+                            } 
+                        } 
                     },
-                    cutout: '84%'
+                    cutout: '80%' 
                 }
             });
 
+            /* BAR CHART - Bakım */
             const ctxMaint = document.getElementById('maintenanceChart').getContext('2d');
             new Chart(ctxMaint, {
                 type: 'bar',
@@ -169,17 +351,26 @@
                     labels: ['Pending', 'Resolved'],
                     datasets: [{
                         data: [@ViewBag.PendingTickets, @ViewBag.ResolvedTickets],
-                        backgroundColor: ['#ffca28', '#4fc3f7'],
-                        borderRadius: 12,
-                        barThickness: 55
+                        backgroundColor: ['#fef08a', '#bae6fd'], 
+                        borderRadius: 4,
+                        barThickness: 50
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#90a4ae' } },
-                        x: { grid: { display: false }, ticks: { color: '#90a4ae' } }
+                        y: { 
+                            beginAtZero: true, 
+                            border: { display: false },
+                            grid: { color: 'rgba(0,0,0,0.03)' }, 
+                            ticks: { color: '#94a3b8', stepSize: 1 } 
+                        },
+                        x: { 
+                            grid: { display: false },
+                            border: { display: true, color: 'rgba(0,0,0,0.1)' },
+                            ticks: { color: '#94a3b8', font: { weight: '500' } } 
+                        }
                     },
                     plugins: { legend: { display: false } }
                 }
