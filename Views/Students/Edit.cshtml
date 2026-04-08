@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-md-6">
                             <label asp-for="RoomId" class="form-label fw-bold text-secondary">Assigned Room</label>
-                            <select asp-for="RoomId" class="form-select form-select-lg bg-light border-0" asp-items="@(new SelectList(ViewBag.Rooms, "Id", "RoomNumber"))" required>
+                            <select asp-for="RoomId" class="form-select form-select-lg bg-light border-0" asp-items="@(new SelectList(ViewBag.Rooms, "Id", "DisplayText"))" required>
                                 <option value="" disabled>-- Please select a room --</option>
                             </select>
                             <span asp-validation-for="RoomId" class="text-danger small"></span>
