@@ -1,0 +1,339 @@
+@{
+    ViewData["Title"] = "Reports & Analytics";
+
+    var collectedRevenue = (decimal)(ViewBag.CollectedRevenue ?? 0m);
+    var totalOverdue = (decimal)(ViewBag.TotalOverdue ?? 0m);
+    var totalTarget = (decimal)(ViewBag.TotalTarget ?? 0m);
+    var collectionRate = (double)(ViewBag.CollectionRate ?? 0.0);
+    var highestOverdueArea = (string)(ViewBag.HighestOverdueArea ?? "N/A");
+    var avgOverdueDays = (double)(ViewBag.AvgOverdueDays ?? 0.0);
+    var topOverdueDept = (string)(ViewBag.TopOverdueDept ?? "N/A");
+    var q1Target = (decimal)(ViewBag.Q1Target ?? 0m);
+    var dataAsOf = (string)(ViewBag.DataAsOf ?? "");
+
+    var collectedPct = totalTarget > 0 ? Math.Round((double)(collectedRevenue / totalTarget) * 100, 2) : 0;
+
+    dynamic overdueList = ViewBag.OverdueList;
+    dynamic monthlyData = ViewBag.MonthlyData;
+}
+
+<style>
+    .reports-page { font-family: 'Outfit', sans-serif; }
+
+    /* Metric Cards */
+    .metric-card {
+        border-radius: 14px;
+        padding: 18px 22px;
+        border: none;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .metric-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .metric-card .card-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .metric-card .card-value { font-size: 2rem; font-weight: 800; line-height: 1.1; }
+    .metric-card .card-sub { font-size: 0.78rem; margin-top: 4px; opacity: 0.85; }
+
+    .metric-green  { background: #e8f8f0; border-left: 5px solid #27ae60; color: #1a6b3c; }
+    .metric-orange { background: #fff4e5; border-left: 5px solid #e67e22; color: #a04000; }
+    .metric-red    { background: #fdecea; border-left: 5px solid #e74c3c; color: #922b21; }
+    .metric-yellow { background: #fef9e7; border-left: 5px solid #f1c40f; color: #7d6608; }
+
+    /* Section Titles */
+    .section-title { font-weight: 800; font-size: 1.25rem; color: #1a202c; margin-bottom: 4px; }
+    .data-date { font-size: 0.75rem; color: #94a3b8; }
+
+    /* Chart Container */
+    .chart-wrapper {
+        background: rgba(255,255,255,0.85);
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        height: 100%;
+    }
+
+    /* Overdue Table */
+    .overdue-panel {
+        background: rgba(255,255,255,0.9);
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        height: 100%;
+    }
+    .overdue-panel .panel-title { font-weight: 700; font-size: 1rem; margin-bottom: 14px; color: #1a202c; }
+    .overdue-table th { font-size: 0.72rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; border: none; padding: 6px 8px; }
+    .overdue-table td { font-size: 0.82rem; padding: 8px 8px; vertical-align: middle; border-color: #f1f5f9; color: #2c3e50; }
+    .overdue-table .student-name { font-weight: 700; font-size: 0.85rem; }
+    .overdue-table .update-date { font-size: 0.68rem; color: #94a3b8; }
+
+    .badge-pending  { background: #27ae60; color: #fff; }
+    .badge-viewed   { background: #2980b9; color: #fff; }
+    .badge-overdue  { background: #e74c3c; color: #fff; }
+
+    /* Summary Panel */
+    .summary-panel {
+        background: rgba(255,255,255,0.85);
+        border-radius: 14px;
+        padding: 18px 22px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .summary-item { background: #f8fafc; border-radius: 10px; padding: 12px 16px; font-size: 0.82rem; }
+    .summary-item .s-label { color: #64748b; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; }
+    .summary-item .s-value { font-weight: 700; color: #1a202c; font-size: 0.9rem; }
+    .management-action { background: #f8fafc; border-radius: 10px; padding: 12px 16px; font-size: 0.82rem; color: #2c3e50; }
+
+    /* Report Actions */
+    .actions-panel {
+        background: rgba(255,255,255,0.85);
+        border-radius: 14px;
+        padding: 20px 24px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .actions-panel .btn-report {
+        background: #4a5568; color: #fff; border: none;
+        border-radius: 10px; font-weight: 600; padding: 9px 18px; font-size: 0.85rem;
+        transition: all 0.25s ease;
+    }
+    .actions-panel .btn-report:hover { background: #2d3748; transform: translateY(-2px); }
+    .actions-panel .btn-export {
+        border-radius: 10px; font-weight: 600; font-size: 0.82rem;
+        padding: 8px 14px; transition: all 0.2s ease;
+    }
+    .btn-refresh { border-radius: 10px; font-weight: 600; font-size: 0.85rem; }
+</style>
+
+<div class="reports-page">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="section-title" style="font-size:1.6rem;">Reports &amp; Analytics Screens</h1>
+    </div>
+
+    <!-- ── KEY FINANCIAL METRICS ── -->
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="section-title">Key Financial Metrics</span>
+        <span class="data-date">Data Current to: @dataAsOf</span>
+    </div>
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="metric-card metric-green">
+                <div class="card-label">Collected Revenue:</div>
+                <div class="card-value">₺@collectedRevenue.ToString("N0")</div>
+                <div class="card-sub">Target ₺@totalTarget.ToString("N0") (@collectedPct%)</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card metric-orange">
+                <div class="card-label">Total Overdue:</div>
+                <div class="card-value">₺@totalOverdue.ToString("N0")</div>
+                <div class="card-sub">@(totalTarget > 0 ? Math.Round((double)(totalOverdue / totalTarget) * 100, 2) : 0)% of Target</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card metric-red">
+                <div class="card-label">Collection Rate:</div>
+                <div class="card-value">@collectionRate%</div>
+                <div class="card-sub">Current Period</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card metric-yellow">
+                <div class="card-label">Highest Overdue Area:</div>
+                <div class="card-value" style="font-size:1.5rem;">@highestOverdueArea</div>
+                <div class="card-sub">Avg. @avgOverdueDays Days</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── FINANCIAL DATA & OVERDUE PAYMENTS ── -->
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="section-title">Financial Data &amp; Overdue Payments</span>
+        <span class="data-date">Data Current to: @dataAsOf</span>
+    </div>
+    <div class="row g-3 mb-4">
+        <!-- Chart -->
+        <div class="col-md-6">
+            <div class="chart-wrapper">
+                <canvas id="revenueChart" height="200"></canvas>
+                <div class="d-flex gap-3 mt-2 justify-content-center" style="font-size:0.75rem;">
+                    <span><span style="display:inline-block;width:12px;height:12px;background:#27ae60;border-radius:3px;margin-right:4px;"></span>Accommodation</span>
+                    <span><span style="display:inline-block;width:12px;height:12px;background:#e67e22;border-radius:3px;margin-right:4px;"></span>Misc Fees</span>
+                </div>
+            </div>
+        </div>
+        <!-- Overdue Table -->
+        <div class="col-md-6">
+            <div class="overdue-panel">
+                <div class="panel-title">Overdue Payments List</div>
+                @if (overdueList != null && ((IEnumerable<dynamic>)overdueList).Any())
+                {
+                    <table class="table overdue-table table-borderless mb-0">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Room</th>
+                                <th>Type</th>
+                                <th>Amount (₺)</th>
+                                <th>Days Overdue</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in overdueList)
+                            {
+                                var days = (int)item.DaysOverdue;
+                                var badgeClass = days == 0 ? "badge-pending" : days < 30 ? "badge-viewed" : "badge-overdue";
+                                var badgeLabel = days == 0 ? "Pending" : days < 30 ? "Viewed" : "Overdue";
+                                <tr>
+                                    <td>
+                                        <div class="student-name">@item.StudentName</div>
+                                        <div class="update-date">Last Update: @((DateTime)item.DueDate).ToString("MMM d, yyyy")</div>
+                                    </td>
+                                    <td>@item.Room</td>
+                                    <td style="font-size:0.78rem;">@item.Type</td>
+                                    <td class="fw-700">₺@((decimal)item.Amount).ToString("N0")</td>
+                                    <td><span class="badge @badgeClass rounded-pill px-2">@badgeLabel</span></td>
+                                    <td>
+                                        <a asp-controller="Dues" asp-action="Index" class="btn btn-sm btn-light p-1" title="View">
+                                            <i class="bi bi-send" style="font-size:0.9rem;"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="data-date text-end mt-2">Data Current to: @dataAsOf</div>
+                }
+                else
+                {
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-check-circle fs-2"></i>
+                        <p class="mt-2">No overdue payments!</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SUMMARY REPORTS FOR MANAGEMENT ── -->
+    <div class="section-title mb-2">3. Summary Reports for Management Review:</div>
+    <div class="summary-panel mb-4">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="summary-item">
+                    <div class="s-label">Top Overdue Dept:</div>
+                    <div class="s-value">@topOverdueDept (Avg. @avgOverdueDays days)</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="summary-item">
+                    <div class="s-label">Target for Q1 '26:</div>
+                    <div class="s-value">₺@q1Target.ToString("N0") (Targeted)</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="management-action">
+                    <strong>Management Action Needed:</strong> Review DuesAndPenalties policy
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── REPORT ACTIONS ── -->
+    <div class="section-title mb-2">Report Actions</div>
+    <div class="actions-panel">
+        <div class="row align-items-center g-3">
+            <div class="col-auto">
+                <label class="fw-600 me-2" style="font-size:0.88rem;">Validation Status</label>
+            </div>
+            <div class="col-auto">
+                <select id="reportType" class="form-select" style="width:220px;font-size:0.85rem;border-radius:10px;">
+                    <option>Report Type</option>
+                    <option>Consolidated Summary</option>
+                    <option>Overdue Details</option>
+                </select>
+            </div>
+            <div class="col-auto ms-auto d-flex gap-2 flex-wrap">
+                <button class="btn btn-secondary btn-refresh" onclick="location.reload()">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                </button>
+                <button class="btn btn-report" onclick="generateReport()">
+                    Generate Summary Report <i class="bi bi-chevron-right"></i>
+                </button>
+                <button class="btn btn-export btn-outline-secondary" onclick="exportPDF()">
+                    <i class="bi bi-filetype-pdf me-1"></i>PDF Export
+                </button>
+                <button class="btn btn-export btn-outline-success" onclick="exportExcel()">
+                    <i class="bi bi-file-earmark-excel me-1"></i>Excel Export
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Monthly Chart Data from server
+    var monthlyData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(monthlyData));
+    var labels = monthlyData.map(d => d.Month);
+    var accommodation = monthlyData.map(d => Number(d.Accommodation));
+    var miscFees = monthlyData.map(d => Number(d.MiscFees));
+
+    var ctx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Accommodation',
+                    data: accommodation,
+                    backgroundColor: 'rgba(39,174,96,0.75)',
+                    borderRadius: 6
+                },
+                {
+                    label: 'Misc Fees',
+                    data: miscFees,
+                    backgroundColor: 'rgba(230,126,34,0.75)',
+                    borderRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Monthly Revenue Trend (₺)',
+                    font: { size: 12, family: 'Outfit' },
+                    color: '#64748b'
+                }
+            },
+            scales: {
+                x: { grid: { display: false }, ticks: { font: { family: 'Outfit', size: 11 } } },
+                y: { grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Outfit', size: 11 } } }
+            }
+        }
+    });
+
+    function generateReport() {
+        var type = document.getElementById('reportType').value;
+        if (type === 'Report Type') {
+            alert('Please select a report type first.');
+            return;
+        }
+        alert('Generating: ' + type + ' report...');
+    }
+
+    function exportPDF() {
+        alert('PDF export feature coming soon.');
+    }
+
+    function exportExcel() {
+        alert('Excel export feature coming soon.');
+    }
+</script>
+}

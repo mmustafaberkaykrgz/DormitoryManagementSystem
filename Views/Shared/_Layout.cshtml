@@ -124,6 +124,12 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Maintenance" asp-action="Index"><i class="bi bi-tools"></i> Maintenance</a>
                 </li>
+                @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Reports" asp-action="Index"><i class="bi bi-bar-chart-fill"></i> Reports</a>
+                    </li>
+                }
             </ul>
 
             <div class="mt-auto p-4 border-top opacity-75 text-center">
