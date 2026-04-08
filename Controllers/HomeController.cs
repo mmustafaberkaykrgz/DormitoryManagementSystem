@@ -21,7 +21,13 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        // Root URL always shows the Welcome landing page
+        // If the user is already authenticated, don't show the landing page, go straight to Dashboard
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            return RedirectToAction("Dashboard");
+        }
+
+        // If not authenticated, show the landing page (Photo 2)
         return View();
     }
 
