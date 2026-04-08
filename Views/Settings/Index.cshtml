@@ -37,7 +37,7 @@
             }
             <li class="nav-item border-0">
                 <a class="nav-link @(!isAdmin ? "active" : "") fw-bold px-4" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="@((!isAdmin).ToString().ToLower())">
-                    <i class="bi bi-person-badge-fill me-1"></i> Personal Profile
+                    <i class="bi bi-person-badge-fill me-1"></i> @(isAdmin ? "Admin Profile" : "Staff Profile")
                 </a>
             </li>
         </ul>
@@ -210,7 +210,7 @@
                                 <span asp-validation-for="ProfileSettings.ConfirmPassword" class="text-danger small"></span>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary rounded-pill px-5 w-100">Update Password</button>
+                                <button type="submit" class="btn btn-primary rounded-pill px-5 w-100">Change Password</button>
                             </div>
                         </div>
                     </div>
@@ -221,3 +221,31 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // URL içindeki #hash değerine göre sekmeyi aktif et
+            const hash = window.location.hash;
+            if (hash) {
+                const tabTriggerEl = document.querySelector(`.nav-link[href="${hash}"]`);
+                if (tabTriggerEl) {
+                    const tab = new bootstrap.Tab(tabTriggerEl);
+                    tab.show();
+                }
+            }
+
+            // Sekme her değiştiğinde URL'yi güncelle (tarayıcı geçmişini korur)
+            const tabLinks = document.querySelectorAll('a[data-bs-toggle="tab"]');
+            tabLinks.forEach(link => {
+                link.addEventListener('shown.bs.tab', function (e) {
+                    const targetHash = e.target.getAttribute('href');
+                    if (history.pushState) {
+                        history.pushState(null, null, targetHash);
+                    } else {
+                        location.hash = targetHash;
+                    }
+                });
+            });
+        });
+    </script>
+}

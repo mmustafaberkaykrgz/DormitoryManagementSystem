@@ -92,7 +92,7 @@ namespace DormitoryManagementSystem.Controllers
             await LogAction("Updated Global Settings");
             await _context.SaveChangesAsync();
             TempData["Success"] = "Global settings updated successfully.";
-            return RedirectToAction(nameof(Index));
+            return Redirect(Url.Action("Index") + "#general");
         }
 
         [HttpPost]
@@ -108,7 +108,7 @@ namespace DormitoryManagementSystem.Controllers
                     if (user.PasswordHash != model.ProfileSettings.CurrentPassword)
                     {
                         TempData["Error"] = "Current password is incorrect.";
-                        return RedirectToAction(nameof(Index));
+                        return Redirect(Url.Action("Index") + "#profile");
                     }
 
                     user.PasswordHash = model.ProfileSettings.NewPassword;
@@ -118,7 +118,7 @@ namespace DormitoryManagementSystem.Controllers
                     TempData["Success"] = "Password updated successfully.";
                 }
             }
-            return RedirectToAction(nameof(Index));
+            return Redirect(Url.Action("Index") + "#profile");
         }
 
         [HttpPost]
@@ -132,7 +132,7 @@ namespace DormitoryManagementSystem.Controllers
                 if (await _context.Users.AnyAsync(u => u.Username == Username))
                 {
                     TempData["Error"] = "Username already exists.";
-                    return RedirectToAction(nameof(Index));
+                    return Redirect(Url.Action("Index") + "#users");
                 }
 
                 var user = new User { Username = Username, PasswordHash = Password, RoleId = role.Id, IsActive = true };
@@ -145,7 +145,7 @@ namespace DormitoryManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Staff account created successfully.";
             }
-            return RedirectToAction(nameof(Index));
+            return Redirect(Url.Action("Index") + "#users");
         }
 
         [HttpPost]
@@ -161,7 +161,7 @@ namespace DormitoryManagementSystem.Controllers
                 if (currentUserIdStr == userId.ToString())
                 {
                     TempData["Error"] = "You cannot deactivate your own account.";
-                    return RedirectToAction(nameof(Index));
+                    return Redirect(Url.Action("Index") + "#users");
                 }
 
                 user.IsActive = !user.IsActive;
@@ -170,7 +170,7 @@ namespace DormitoryManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 TempData["Success"] = $"User account is now {(user.IsActive ? "Active" : "Inactive")}.";
             }
-            return RedirectToAction(nameof(Index));
+            return Redirect(Url.Action("Index") + "#users");
         }
 
         [HttpGet]
