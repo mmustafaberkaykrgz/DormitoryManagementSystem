@@ -34,7 +34,10 @@ namespace DormitoryManagementSystem.Controllers
         [Authorize(Roles = "Admin,Staff")]
         public IActionResult Create()
         {
-            ViewBag.Rooms = _context.Rooms.ToList();
+            ViewBag.Rooms = _context.Rooms.Select(r => new {
+                Id = r.Id,
+                DisplayText = r.RoomNumber + " - " + (r.Capacity - r.Students.Count) + " available beds"
+            }).ToList();
             return View();
         }
 
@@ -108,7 +111,10 @@ namespace DormitoryManagementSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Rooms = _context.Rooms.ToList();
+            ViewBag.Rooms = _context.Rooms.Select(r => new {
+                Id = r.Id,
+                DisplayText = r.RoomNumber + " - " + (r.Capacity - r.Students.Count) + " available beds"
+            }).ToList();
             return View(student);
         }
 
@@ -118,7 +124,10 @@ namespace DormitoryManagementSystem.Controllers
             if (id == null) return NotFound();
             var student = await _context.Students.FindAsync(id);
             if (student == null) return NotFound();
-            ViewBag.Rooms = _context.Rooms.ToList();
+            ViewBag.Rooms = _context.Rooms.Select(r => new {
+                Id = r.Id,
+                DisplayText = r.RoomNumber + " - " + (r.Capacity - r.Students.Count) + " available beds"
+            }).ToList();
             return View(student);
         }
 
@@ -165,7 +174,10 @@ namespace DormitoryManagementSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Rooms = _context.Rooms.ToList();
+            ViewBag.Rooms = _context.Rooms.Select(r => new {
+                Id = r.Id,
+                DisplayText = r.RoomNumber + " - " + (r.Capacity - r.Students.Count) + " available beds"
+            }).ToList();
             return View(student);
         }
 

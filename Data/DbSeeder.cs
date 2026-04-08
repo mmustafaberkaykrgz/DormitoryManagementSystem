@@ -7,8 +7,8 @@ namespace DormitoryManagementSystem.Data
     {
         public static void Seed(AppDbContext context)
         {
-            // Uygulamayı her açtığımızda veritabanını yeni modellerle baştan yaratır
-            context.Database.EnsureDeleted();
+            // Veritabanı yoksa oluşturur, var olan veriler korunur
+            // context.Database.EnsureDeleted(); // (Verilerin silinmemesi için iptal edildi)
             context.Database.EnsureCreated();
 
             // Eğer veritabanında hiç "Role" yoksa, 3 ana rolü ekle
