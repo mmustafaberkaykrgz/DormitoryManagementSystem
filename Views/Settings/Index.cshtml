@@ -129,8 +129,8 @@
                                             {
                                                 <form asp-action="ToggleUserStatus" method="post" class="d-inline">
                                                     <input type="hidden" name="userId" value="@item.User?.Id" />
-                                                    <button type="submit" class="btn btn-sm @(item.User?.IsActive == true ? "btn-outline-danger" : "btn-outline-success") rounded-circle" title="Toggle Status">
-                                                        <i class="bi @(item.User?.IsActive == true ? "bi-person-x-fill" : "bi-person-check-fill")"></i>
+                                                    <button type="submit" class="btn btn-sm @(item.User?.IsActive == true ? "btn-outline-danger" : "btn-outline-success") rounded-pill px-3" title="Toggle Status">
+                                                        <i class="bi @(item.User?.IsActive == true ? "bi-person-x-fill" : "bi-person-check-fill")"></i> Toggle Status
                                                     </button>
                                                 </form>
                                             }
