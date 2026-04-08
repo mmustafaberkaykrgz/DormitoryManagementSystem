@@ -187,7 +187,13 @@ namespace DormitoryManagementSystem.Controllers
             await LogAction("Downloaded a database backup");
             await _context.SaveChangesAsync();
 
-            var bytes = await System.IO.File.ReadAllBytesAsync(dbPath);
+            // SQLite dosyası uygulama tarafından kilitli olduğundan FileShare.ReadWrite ile açıyoruz
+            byte[] bytes;
+            await using (var fs = new FileStream(dbPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                bytes = new byte[fs.Length];
+                await fs.ReadAsync(bytes, 0, bytes.Length);
+            }
             return File(bytes, "application/octet-stream", $"DormitoryBackup_{DateTime.Now:yyyyMMdd_HHmmss}.db");
         }
 
