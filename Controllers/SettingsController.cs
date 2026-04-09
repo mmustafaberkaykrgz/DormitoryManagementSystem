@@ -184,9 +184,9 @@ namespace DormitoryManagementSystem.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateStaff(string Name, string Surname, string Email, string Username, string Password)
+        public async Task<IActionResult> CreatePersonnel(string Name, string Surname, string Email, string Username, string Password, string Role)
         {
-            var role = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Staff");
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == Role);
             if (role != null)
             {
                 if (await _context.Users.AnyAsync(u => u.Username == Username))
@@ -199,11 +199,20 @@ namespace DormitoryManagementSystem.Controllers
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                var staff = new Staff { Name = Name, Surname = Surname, Email = Email, UserId = user.Id };
-                _context.Staffs.Add(staff);
-                await LogAction($"Created new staff: {Username}");
+                if (Role == "Admin")
+                {
+                    var admin = new Admin { Name = Name, Surname = Surname, Email = Email, UserId = user.Id };
+                    _context.Admins.Add(admin);
+                }
+                else
+                {
+                    var staff = new Staff { Name = Name, Surname = Surname, Email = Email, UserId = user.Id };
+                    _context.Staffs.Add(staff);
+                }
+
+                await LogAction($"Created new {Role}: {Username}");
                 await _context.SaveChangesAsync();
-                TempData["Success"] = "Staff account created successfully.";
+                TempData["Success"] = $"{Role} account created successfully.";
             }
             return Redirect(Url.Action("Index") + "#users");
         }

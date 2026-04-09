@@ -216,7 +216,58 @@
 
                 <!-- Tab 2: User Management -->
                 <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
-                    <div class="form-section-title"><i class="bi bi-people-fill"></i> Staff & Admin Accounts</div>
+                    <div class="row align-items-center mb-4">
+                        <div class="col">
+                            <div class="form-section-title mb-0"><i class="bi bi-people-fill"></i> Staff & Admin Accounts</div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#addPersonnelForm">
+                                <i class="bi bi-person-plus-fill me-1"></i> Add New Personnel
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Add Personnel Form (Collapsible) -->
+                    <div class="collapse mb-4" id="addPersonnelForm">
+                        <div class="card card-body border-0 shadow-sm rounded-4 p-4" style="background:#f8faff;">
+                            <form asp-action="CreatePersonnel" method="post">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">First Name</label>
+                                        <input name="Name" class="form-control form-control-sm" required placeholder="Name" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">Last Name</label>
+                                        <input name="Surname" class="form-control form-control-sm" required placeholder="Surname" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">E-Mail</label>
+                                        <input name="Email" type="email" class="form-control form-control-sm" required placeholder="email@example.com" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">Role</label>
+                                        <select name="Role" class="form-select form-select-sm" required>
+                                            <option value="Staff">Staff</option>
+                                            <option value="Admin">Admin</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">Username</label>
+                                        <input name="Username" class="form-control form-control-sm" required placeholder="username" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">Password</label>
+                                        <input name="Password" type="password" class="form-control form-control-sm" required placeholder="******" />
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-primary btn-sm w-100 rounded-pill py-2">
+                                            <i class="bi bi-plus-circle me-1"></i> Create Account
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="table-responsive">
                         <table class="table align-middle">
