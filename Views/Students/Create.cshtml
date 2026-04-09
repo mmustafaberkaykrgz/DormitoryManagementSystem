@@ -27,9 +27,9 @@
                             <span asp-validation-for="Surname" class="text-danger small"></span>
                         </div>
                         <div class="col-md-4">
-                            <label asp-for="NationalId" class="form-label fw-bold text-secondary"></label>
-                            <input asp-for="NationalId" class="form-control form-control-lg bg-light border-0" placeholder="11-digit TC number" maxlength="11" />
-                            <span asp-validation-for="NationalId" class="text-danger small"></span>
+                            <label asp-for="StudentId" class="form-label fw-bold text-secondary"></label>
+                            <input asp-for="StudentId" class="form-control form-control-lg bg-light border-0" placeholder="7-digit registration number" maxlength="7" />
+                            <span asp-validation-for="StudentId" class="text-danger small"></span>
                         </div>
                     </div>
 
@@ -76,7 +76,7 @@
                     <div class="alert alert-info border-0 rounded-3 py-2 small mt-2">
                         <i class="bi bi-info-circle-fill me-2"></i>
                         <strong>Auto Login Info:</strong> A system account will be created automatically.
-                        Username: <code>name.surname</code> | Password: <strong>last 4 TC digits + <code>@@Dorm</code></strong>
+                        Username: <code>name.surname</code> | Password: <strong>first 4 digits of ID + <code>@@Dorm</code></strong>
                     </div>
 
                     <div class="d-flex justify-content-between mt-4 border-top pt-4">

@@ -32,7 +32,7 @@ namespace DormitoryManagementSystem.Controllers
         {
             // Skip server-side Required on Username — it depends on role
             ModelState.Remove("Username");
-            ModelState.Remove("NationalId");
+            ModelState.Remove("StudentId");
 
             if (!ModelState.IsValid)
                 return View(model);
@@ -41,16 +41,16 @@ namespace DormitoryManagementSystem.Controllers
 
             if (model.SelectedRole == "Student")
             {
-                // Students log in with TC identity number + password
-                if (string.IsNullOrWhiteSpace(model.NationalId))
+                // Students log in with Registration Number + password
+                if (string.IsNullOrWhiteSpace(model.StudentId))
                 {
-                    ModelState.AddModelError("NationalId", "TC Identity Number is required.");
+                    ModelState.AddModelError("StudentId", "Dormitory Registration Number is required.");
                     return View(model);
                 }
 
                 var student = await _context.Students
                     .Include(s => s.User)
-                    .FirstOrDefaultAsync(s => s.NationalId == model.NationalId);
+                    .FirstOrDefaultAsync(s => s.StudentId == model.StudentId);
 
                 if (student?.User != null && student.User.PasswordHash == model.Password && student.User.IsActive)
                     user = student.User;

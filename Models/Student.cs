@@ -17,9 +17,9 @@ namespace DormitoryManagementSystem.Models
         public string Surname { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(11, MinimumLength = 11)]
-        [Display(Name = "TC Identity No")]
-        public string NationalId { get; set; } = string.Empty;
+        [StringLength(7, MinimumLength = 7)]
+        [Display(Name = "Dormitory Registration Number")]
+        public string StudentId { get; set; } = string.Empty;
 
         [Required]
         [EmailAddress]
@@ -45,8 +45,8 @@ namespace DormitoryManagementSystem.Models
         [NotMapped]
         public string FullName => $"{Name} {Surname}";
 
-        // For display with TC disambiguation
+        // For display with Registration Number disambiguation
         [NotMapped]
-        public string FullNameWithTC => $"{Name} {Surname} (TC: {NationalId})";
+        public string FullNameWithRegNo => $"{Name} {Surname} (ID: {StudentId})";
     }
 }

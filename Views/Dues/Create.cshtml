@@ -27,7 +27,7 @@
                         <datalist id="studentListDues">
                             @foreach (var s in students)
                             {
-                                <option value="@s.FullNameWithTC" data-id="@s.Id">@s.FullNameWithTC</option>
+                                <option value="@s.FullNameWithRegNo" data-id="@s.Id">@s.FullNameWithRegNo</option>
                             }
                         </datalist>
                         <input type="hidden" asp-for="StudentId" id="studentIdHidden" />

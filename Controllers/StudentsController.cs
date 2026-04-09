@@ -33,7 +33,7 @@ namespace DormitoryManagementSystem.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.NationalId.Contains(search) || s.Name.Contains(search) || s.Surname.Contains(search));
+                query = query.Where(s => s.StudentId.Contains(search) || s.Name.Contains(search) || s.Surname.Contains(search));
             }
 
             int totalItems = await query.CountAsync();
@@ -64,7 +64,7 @@ namespace DormitoryManagementSystem.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin,Staff")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Surname,NationalId,Email,PhoneNumber,RoomId,MembStartDate,MembEndDate")] Student student)
+        public async Task<IActionResult> Create([Bind("Name,Surname,StudentId,Email,PhoneNumber,RoomId,MembStartDate,MembEndDate")] Student student)
         {
             if (student.RoomId == 0)
             {
@@ -80,10 +80,10 @@ namespace DormitoryManagementSystem.Controllers
                 }
             }
 
-            // Check TC uniqueness
-            var tcExists = await _context.Students.AnyAsync(s => s.NationalId == student.NationalId);
-            if (tcExists)
-                ModelState.AddModelError("NationalId", "This student (National ID) is already registered in the system.");
+            // Check Registration Number uniqueness
+            var idExists = await _context.Students.AnyAsync(s => s.StudentId == student.StudentId);
+            if (idExists)
+                ModelState.AddModelError("StudentId", "This Registration Number is already registered in the system.");
 
             ModelState.Remove("User");
             ModelState.Remove("Room");
@@ -110,8 +110,8 @@ namespace DormitoryManagementSystem.Controllers
                     counter++;
                 }
 
-                // Auto-password: last 4 digits of TC + "@Dorm"
-                var autoPassword = student.NationalId.Substring(student.NationalId.Length - 4) + "@Dorm";
+                // Auto-password: first 4 digits of Registration Number + "@Dorm"
+                var autoPassword = student.StudentId.Substring(0, 4) + "@Dorm";
 
                 var newUser = new User
                 {
@@ -154,7 +154,7 @@ namespace DormitoryManagementSystem.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin,Staff")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,NationalId,Email,PhoneNumber,RoomId,MembStartDate,MembEndDate,UserId")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,StudentId,Email,PhoneNumber,RoomId,MembStartDate,MembEndDate,UserId")] Student student)
         {
             if (id != student.Id) return NotFound();
 
@@ -170,10 +170,10 @@ namespace DormitoryManagementSystem.Controllers
                     ModelState.AddModelError("RoomId", "Room is at full capacity!");
             }
 
-            // Check TC uniqueness excluding self
-            var tcExists = await _context.Students.AnyAsync(s => s.NationalId == student.NationalId && s.Id != student.Id);
-            if (tcExists)
-                ModelState.AddModelError("NationalId", "Another student with this TC number already exists.");
+            // Check Registration Number uniqueness excluding self
+            var idExists = await _context.Students.AnyAsync(s => s.StudentId == student.StudentId && s.Id != student.Id);
+            if (idExists)
+                ModelState.AddModelError("StudentId", "Another student with this Registration Number already exists.");
 
             ModelState.Remove("User");
             ModelState.Remove("Room");

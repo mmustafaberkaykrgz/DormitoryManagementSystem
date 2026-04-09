@@ -11,8 +11,8 @@ namespace DormitoryManagementSystem.Models
         public string? Username { get; set; }
 
         // Student login fields
-        [Display(Name = "TC Identity No")]
-        public string? NationalId { get; set; }
+        [Display(Name = "Dormitory Registration Number")]
+        public string? StudentId { get; set; }
 
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]

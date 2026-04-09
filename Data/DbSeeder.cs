@@ -7,9 +7,8 @@ namespace DormitoryManagementSystem.Data
     {
         public static void Seed(AppDbContext context)
         {
-            // Create database if it doesn't exist, preserve existing data
-            // context.Database.EnsureDeleted(); // (Uncomment only if you want to clear all data)
-            context.Database.EnsureCreated();
+            // Apply all pending migrations to ensure database schema is up to date
+            context.Database.Migrate();
 
             // If no roles exist in the database, add the 3 main roles
             if (!context.Roles.Any())

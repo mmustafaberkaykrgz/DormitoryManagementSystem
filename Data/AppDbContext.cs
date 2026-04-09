@@ -32,7 +32,7 @@ namespace DormitoryManagementSystem.Data
             modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
             modelBuilder.Entity<Room>().HasIndex(r => r.RoomNumber).IsUnique();
             modelBuilder.Entity<SystemSetting>().HasIndex(s => s.KeyName).IsUnique();
-            modelBuilder.Entity<Student>().HasIndex(s => s.NationalId).IsUnique();
+            modelBuilder.Entity<Student>().HasIndex(s => s.StudentId).IsUnique();
         } 
     }   
 } 

@@ -64,7 +64,7 @@ namespace DormitoryManagementSystem.Controllers
                             Email = student.Email,
                             PhoneNumber = student.PhoneNumber,
                             RoomName = student.Room?.RoomNumber,
-                            NationalId = student.NationalId
+                            StudentId = student.StudentId
                         };
                     }
                 }

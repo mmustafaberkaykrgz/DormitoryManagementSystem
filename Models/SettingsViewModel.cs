@@ -34,7 +34,7 @@ namespace DormitoryManagementSystem.Models
         public string? PhoneNumber { get; set; }
 
         public string? RoomName { get; set; }
-        public string? NationalId { get; set; } // ReadOnly in UI
+        public string? StudentId { get; set; } // ReadOnly in UI
     }
 
     public class GlobalSettingsViewModel

@@ -68,7 +68,7 @@
                                 <thead class="text-secondary small fw-bold text-uppercase">
                                     <tr>
                                         <th>Student</th>
-                                        <th>TC Identity</th>
+                                        <th>Reg Number</th>
                                         <th>Management</th>
                                     </tr>
                                 </thead>
@@ -93,7 +93,7 @@
                                                         <div class="fw-bold">@student.Name @student.Surname</div>
                                                     </div>
                                                 </td>
-                                                <td class="small text-muted font-monospace">@student.NationalId</td>
+                                                <td class="small text-muted font-monospace">@student.StudentId</td>
                                                 <td>
                                                     <a asp-controller="Students" asp-action="Details" asp-route-id="@student.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                                         <i class="bi bi-eye"></i> Profile

@@ -360,12 +360,12 @@
                     <!-- Student Fields -->
                     <div id="studentFields" style="display:none;">
                         <div class="mb-4">
-                            <label class="form-label-custom">TC Identity Number</label>
+                            <label class="form-label-custom">Registration Number</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-fingerprint"></i></span>
-                                <input asp-for="NationalId" name="NationalId" class="form-control" placeholder="Enter your 11-digit TC number" maxlength="11" inputmode="numeric" />
+                                <input asp-for="StudentId" name="StudentId" class="form-control" placeholder="Enter your 7-digit ID" maxlength="7" inputmode="numeric" />
                             </div>
-                            <span asp-validation-for="NationalId" class="text-danger small"></span>
+                            <span asp-validation-for="StudentId" class="text-danger small"></span>
                         </div>
                     </div>
 
