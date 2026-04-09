@@ -117,6 +117,11 @@
                 @if (isAdmin)
                 {
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="addstaff-tab" data-bs-toggle="tab" data-bs-target="#addstaff" type="button" role="tab" aria-controls="addstaff" aria-selected="false">
+                            <i class="bi bi-person-plus-fill"></i> Add Staff
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="false">
                             <i class="bi bi-people-fill"></i> Users
                         </button>
@@ -214,58 +219,115 @@
                     </form>
                 </div>
 
-                <!-- Tab 2: User Management -->
+                <!-- Tab 2: Add Staff (Premium Form) -->
+                <div class="tab-pane fade" id="addstaff" role="tabpanel" aria-labelledby="addstaff-tab">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10">
+                            <div class="form-section-title"><i class="bi bi-person-plus-fill"></i> Create Staff Account</div>
+                            <p class="text-muted small mb-4">Register a new personnel or administrator account with full personal and security details.</p>
+
+                            <div class="card border-0 shadow-sm p-4 p-md-5" style="border-radius: 20px; background: #ffffff;">
+                                <form asp-action="CreatePersonnel" method="post" novalidate>
+                                    
+                                    <!-- Role Selector -->
+                                    <div class="section-label" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin: 0 0 15px; display: flex; align-items: center; gap: 8px;">
+                                        Role Selection
+                                        <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="form-check p-0">
+                                                <input type="radio" class="btn-check" name="Role" id="roleStaff" value="Staff" checked>
+                                                <label class="btn btn-outline-success w-100 rounded-pill py-2 fw-bold" for="roleStaff">
+                                                    <i class="bi bi-person-badge me-1"></i> Staff Account
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check p-0">
+                                                <input type="radio" class="btn-check" name="Role" id="roleAdmin" value="Admin">
+                                                <label class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold" for="roleAdmin">
+                                                    <i class="bi bi-shield-lock me-1"></i> Admin Account
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Personal Info -->
+                                    <div class="section-label" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin: 25px 0 15px; display: flex; align-items: center; gap: 8px;">
+                                        Personal Information
+                                        <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+                                    </div>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-secondary">First Name</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                                <input name="Name" class="form-control" required placeholder="First name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-secondary">Last Name</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                                <input name="Surname" class="form-control" required placeholder="Last name" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Account Details -->
+                                    <div class="section-label" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin: 25px 0 15px; display: flex; align-items: center; gap: 8px;">
+                                        Account Details
+                                        <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+                                    </div>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-secondary">Username</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-at"></i></span>
+                                                <input name="Username" class="form-control" required placeholder="username" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-secondary">Email Address</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                                <input name="Email" type="email" class="form-control" required placeholder="email@example.com" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Security -->
+                                    <div class="section-label" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin: 25px 0 15px; display: flex; align-items: center; gap: 8px;">
+                                        Security
+                                        <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+                                    </div>
+                                    <div class="row g-3 mb-5">
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-secondary">Password</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                <input name="Password" type="password" class="form-control" required placeholder="******" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-secondary">Action</label>
+                                            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
+                                                <i class="bi bi-person-check-fill me-2"></i> Create Personnel Account
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: User Management -->
                 <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
                     <div class="row align-items-center mb-4">
                         <div class="col">
                             <div class="form-section-title mb-0"><i class="bi bi-people-fill"></i> Staff & Admin Accounts</div>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#addPersonnelForm">
-                                <i class="bi bi-person-plus-fill me-1"></i> Add New Personnel
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Add Personnel Form (Collapsible) -->
-                    <div class="collapse mb-4" id="addPersonnelForm">
-                        <div class="card card-body border-0 shadow-sm rounded-4 p-4" style="background:#f8faff;">
-                            <form asp-action="CreatePersonnel" method="post" novalidate>
-                                <div class="row g-3">
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">First Name</label>
-                                        <input name="Name" class="form-control form-control-sm" required placeholder="Name" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Last Name</label>
-                                        <input name="Surname" class="form-control form-control-sm" required placeholder="Surname" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">E-Mail</label>
-                                        <input name="Email" type="email" class="form-control form-control-sm" required placeholder="email@example.com" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Role</label>
-                                        <select name="Role" class="form-select form-select-sm" required>
-                                            <option value="Staff">Staff</option>
-                                            <option value="Admin">Admin</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Username</label>
-                                        <input name="Username" class="form-control form-control-sm" required placeholder="username" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Password</label>
-                                        <input name="Password" type="password" class="form-control form-control-sm" required placeholder="******" />
-                                    </div>
-                                    <div class="col-md-3 d-flex align-items-end">
-                                        <button type="submit" class="btn btn-primary btn-sm w-100 rounded-pill py-2">
-                                            <i class="bi bi-plus-circle me-1"></i> Create Account
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
                         </div>
                     </div>
 
