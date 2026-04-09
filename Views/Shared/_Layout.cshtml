@@ -509,20 +509,22 @@
 
                 @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
                 {
-                    <li class="nav-section-label">Admin</li>
+                    <li class="nav-section-label">Management</li>
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "")"
                            asp-controller="Reports" asp-action="Index">
                             <i class="bi bi-bar-chart-fill"></i> Reports
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")"
-                           asp-controller="Settings" asp-action="Index">
-                            <i class="bi bi-gear-fill"></i> Settings
-                        </a>
-                    </li>
                 }
+
+                <li class="nav-section-label">Account</li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")"
+                       asp-controller="Settings" asp-action="Index">
+                        <i class="bi bi-gear-fill"></i> Settings
+                    </a>
+                </li>
             </ul>
 
             <div class="sidebar-footer">

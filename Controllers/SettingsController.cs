@@ -22,6 +22,7 @@ namespace DormitoryManagementSystem.Controllers
         public async Task<IActionResult> Index()
         {
             var viewModel = new SettingsViewModel();
+            bool isAdmin = User.IsInRole("Admin");
             if (isAdmin || User.IsInRole("Staff"))
             {
                 // Load Global Settings
