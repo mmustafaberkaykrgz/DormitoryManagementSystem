@@ -35,7 +35,7 @@ namespace DormitoryManagementSystem.Controllers
             return View(await query.OrderByDescending(m => m.Id).ToListAsync());
         }
 
-        [Authorize(Roles = "Admin,Student")]
+        [Authorize(Roles = "Student")]
         public IActionResult Create()
         {
             ViewBag.Students = _context.Students.ToList();
@@ -44,7 +44,7 @@ namespace DormitoryManagementSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Student")]
+        [Authorize(Roles = "Student")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StudentId,RoomId,Issue")] MaintenanceTicket ticket)
         {

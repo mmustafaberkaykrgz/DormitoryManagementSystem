@@ -9,7 +9,7 @@
             <span>Service & repair request tracking</span>
         </div>
     </div>
-    @if (!User.IsInRole("Staff"))
+    @if (User.IsInRole("Student"))
     {
         <a asp-action="Create" class="btn-primary-action">
             <i class="bi bi-plus-lg"></i> File New Ticket
