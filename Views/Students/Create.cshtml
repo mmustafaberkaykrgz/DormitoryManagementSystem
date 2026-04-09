@@ -58,13 +58,13 @@
 
                     <div class="row g-4 mb-4">
                         <div class="col-md-6">
-                            <label asp-for="MembStartDate" class="form-label fw-bold text-secondary"></label>
-                            <input asp-for="MembStartDate" type="date" class="form-control form-control-lg bg-light border-0" />
+                            <label asp-for="MembStartDate" class="form-label fw-bold text-secondary">Contract Start</label>
+                            <input asp-for="MembStartDate" type="text" class="form-control form-control-lg bg-light border-0 flatpickr-date" placeholder="Select Start Date" />
                             <span asp-validation-for="MembStartDate" class="text-danger small"></span>
                         </div>
                         <div class="col-md-6">
-                            <label asp-for="MembEndDate" class="form-label fw-bold text-secondary"></label>
-                            <input asp-for="MembEndDate" type="date" class="form-control form-control-lg bg-light border-0" />
+                            <label asp-for="MembEndDate" class="form-label fw-bold text-secondary">Contract End</label>
+                            <input asp-for="MembEndDate" type="text" class="form-control form-control-lg bg-light border-0 flatpickr-date" placeholder="Select End Date" />
                             <span asp-validation-for="MembEndDate" class="text-danger small"></span>
                         </div>
                     </div>

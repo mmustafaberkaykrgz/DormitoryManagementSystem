@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-6 form-group mb-4">
                             <label asp-for="DueDate" class="form-label fw-bold text-secondary">Deadline Date</label>
-                            <input asp-for="DueDate" type="date" class="form-control form-control-lg bg-light border-0" />
+                            <input asp-for="DueDate" type="text" class="form-control form-control-lg bg-light border-0 flatpickr-date" placeholder="Select Due Date" />
                             <span asp-validation-for="DueDate" class="text-danger small"></span>
                         </div>
                     </div>
