@@ -34,10 +34,11 @@ namespace DormitoryManagementSystem.Controllers
                 viewModel.GlobalSettings.DefaultMonthlyDue = decimal.TryParse(dict.GetValueOrDefault("DefaultMonthlyDue", "0"), out var d) ? d : 0;
                 viewModel.GlobalSettings.LatePenaltyFee = decimal.TryParse(dict.GetValueOrDefault("LatePenaltyFee", "0"), out var p) ? p : 0;
 
-                // Load Staff List
+                // Load User Lists (Admins & Staff)
                 if (isAdmin)
                 {
-                    viewModel.StaffList = await _context.Staffs.Include(s => s.User).ToListAsync();
+                    viewModel.AdminList = await _context.Admins.Include(a => a.User).ThenInclude(u => u.Role).ToListAsync();
+                    viewModel.StaffList = await _context.Staffs.Include(s => s.User).ThenInclude(u => u.Role).ToListAsync();
                 }
 
                 // Load Audit Logs (last 100)

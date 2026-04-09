@@ -7,6 +7,7 @@ namespace DormitoryManagementSystem.Models
         public GlobalSettingsViewModel GlobalSettings { get; set; } = new();
         public ProfileSettingsViewModel ProfileSettings { get; set; } = new();
         public List<AuditLog> RecentLogs { get; set; } = new();
+        public List<Admin> AdminList { get; set; } = new();
         public List<Staff> StaffList { get; set; } = new();
         public StudentInfoViewModel StudentInfo { get; set; } = new();
     }

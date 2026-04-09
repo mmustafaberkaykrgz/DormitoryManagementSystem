@@ -230,12 +230,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.StaffList)
+                                @foreach (var item in Model.AdminList)
                                 {
                                     <tr class="staff-row">
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
-                                                <div class="user-avatar" style="width:32px;height:32px;font-size:0.8rem;">@(item.FullName?.Substring(0,1))</div>
+                                                <div class="user-avatar" style="width:32px;height:32px;font-size:0.8rem;background:#1A1F5E;color:white;">@(item.FullName?.Substring(0,1).ToUpper())</div>
                                                 <span class="fw-bold">@item.FullName</span>
                                             </div>
                                         </td>
@@ -244,19 +244,56 @@
                                             <div class="small text-muted">User: @item.User?.Username</div>
                                         </td>
                                         <td>
-                                            @if (item.User?.RoleId == 1) { <span class="badge staff-badge-admin rounded-pill px-3">Admin</span> }
-                                            else { <span class="badge staff-badge-staff rounded-pill px-3">Staff</span> }
+                                            <span class="badge staff-badge-admin rounded-pill px-3">Admin</span>
                                         </td>
                                         <td>
-                                            @if (item.User?.IsActive == true) { <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">Active</span> }
-                                            else { <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2">Inactive</span> }
+                                            @if (item.User?.IsActive == true) { <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2" style="font-size:0.65rem;">Active</span> }
+                                            else { <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2" style="font-size:0.65rem;">Inactive</span> }
                                         </td>
                                         <td class="text-end">
                                             @if (item.User?.Id != int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0"))
                                             {
                                                 <form asp-action="ToggleUserStatus" method="post" class="d-inline">
                                                     <input type="hidden" name="userId" value="@item.User?.Id" />
-                                                    <button type="submit" class="btn btn-sm btn-outline-@(item.User?.IsActive == true ? "danger" : "success") rounded-pill px-3 fw-bold">
+                                                    <button type="submit" class="btn btn-sm btn-outline-@(item.User?.IsActive == true ? "danger" : "success") rounded-pill px-3 fw-bold" style="font-size:0.75rem;">
+                                                        <i class="bi @(item.User?.IsActive == true ? "bi-person-x" : "bi-person-check")"></i> 
+                                                        @(item.User?.IsActive == true ? "Disable" : "Enable")
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-light text-muted border px-2" style="font-size:0.75rem;">(You)</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                @foreach (var item in Model.StaffList)
+                                {
+                                    <tr class="staff-row">
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="user-avatar" style="width:32px;height:32px;font-size:0.8rem;">@(item.FullName?.Substring(0,1).ToUpper())</div>
+                                                <span class="fw-bold">@item.FullName</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="small">@item.Email</div>
+                                            <div class="small text-muted">User: @item.User?.Username</div>
+                                        </td>
+                                        <td>
+                                            <span class="badge staff-badge-staff rounded-pill px-3">Staff</span>
+                                        </td>
+                                        <td>
+                                            @if (item.User?.IsActive == true) { <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2" style="font-size:0.65rem;">Active</span> }
+                                            else { <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2" style="font-size:0.65rem;">Inactive</span> }
+                                        </td>
+                                        <td class="text-end">
+                                            @if (item.User?.Id != int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0"))
+                                            {
+                                                <form asp-action="ToggleUserStatus" method="post" class="d-inline">
+                                                    <input type="hidden" name="userId" value="@item.User?.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-@(item.User?.IsActive == true ? "danger" : "success") rounded-pill px-3 fw-bold" style="font-size:0.75rem;">
                                                         <i class="bi @(item.User?.IsActive == true ? "bi-person-x" : "bi-person-check")"></i> 
                                                         @(item.User?.IsActive == true ? "Disable" : "Enable")
                                                     </button>
