@@ -172,8 +172,8 @@ namespace DormitoryManagementSystem.Controllers
                 summarySheet.Cell(9, 1).Style.Font.Bold = true;
                 summarySheet.Range("A9:B9").Merge().Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.LightGray;
 
-                var totalCapacity = await _context.Rooms.SumAsync(r => r.Capacity);
-                var occupiedBeds  = await _context.Students.CountAsync(s => s.RoomId != null);
+                var totalCapacity = await _context.Rooms.AsNoTracking().SumAsync(r => r.Capacity);
+                var occupiedBeds  = await _context.Students.AsNoTracking().CountAsync(s => s.RoomId > 0);
                 var occupancyRate = totalCapacity > 0 ? Math.Round((double)occupiedBeds / totalCapacity * 100, 1) : 0;
 
                 summarySheet.Cell(10, 1).Value = "Total Capacity";    summarySheet.Cell(10, 2).Value = totalCapacity;

@@ -37,8 +37,8 @@ namespace DormitoryManagementSystem.Controllers
                 // Load User Lists (Admins & Staff)
                 if (isAdmin)
                 {
-                    viewModel.AdminList = await _context.Admins.AsNoTracking().Include(a => a.User!).ThenInclude(u => u.Role).ToListAsync();
-                    viewModel.StaffList = await _context.Staffs.AsNoTracking().Include(s => s.User!).ThenInclude(u => u.Role).ToListAsync();
+                    viewModel.AdminList = await _context.Admins.AsNoTracking().Include(a => a.User!).ThenInclude(u => u!.Role).ToListAsync();
+                    viewModel.StaffList = await _context.Staffs.AsNoTracking().Include(s => s.User!).ThenInclude(u => u!.Role).ToListAsync();
                 }
 
                 // Load Audit Logs (last 100)
