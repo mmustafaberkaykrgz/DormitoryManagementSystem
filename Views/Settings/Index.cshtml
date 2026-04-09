@@ -467,35 +467,34 @@
                     <div class="row justify-content-center">
                         <div class="col-md-9">
                             <div class="form-section-title"><i class="bi bi-person-circle"></i> Personal Profile Information</div>
-                            <form asp-action="UpdateStudentInfo" method="post">
-                                <input type="hidden" asp-for="StudentInfo.Id" />
+                            <div>
                                 <div class="row g-4">
                                     <div class="col-md-6">
                                         <label asp-for="StudentInfo.Name" class="form-label"></label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                            <input asp-for="StudentInfo.Name" class="form-control" />
+                                            <input asp-for="StudentInfo.Name" class="form-control bg-light" readonly disabled />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label asp-for="StudentInfo.Surname" class="form-label"></label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                            <input asp-for="StudentInfo.Surname" class="form-control" />
+                                            <input asp-for="StudentInfo.Surname" class="form-control bg-light" readonly disabled />
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <label asp-for="StudentInfo.Email" class="form-label"></label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                            <input asp-for="StudentInfo.Email" class="form-control" />
+                                            <input asp-for="StudentInfo.Email" class="form-control bg-light" readonly disabled />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label asp-for="StudentInfo.PhoneNumber" class="form-label"></label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-phone"></i></span>
-                                            <input asp-for="StudentInfo.PhoneNumber" class="form-control" placeholder="+90 5XX XXX XX XX" />
+                                            <input asp-for="StudentInfo.PhoneNumber" class="form-control bg-light" readonly disabled placeholder="+90 5XX XXX XX XX" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -513,13 +512,9 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-12 text-end mt-4">
-                                        <button type="submit" class="btn btn-primary-action px-5">
-                                            <i class="bi bi-check-circle-fill me-2"></i> Update Profile Information
-                                        </button>
-                                    </div>
+
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>

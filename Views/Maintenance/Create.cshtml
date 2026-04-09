@@ -24,7 +24,7 @@
                             <input list="studentListMaintenance"
                                    id="maintenanceStudentInput"
                                    class="form-control form-control-lg bg-light border-0"
-                                   placeholder="Type name or TC to search..."
+                                   placeholder="Type name or Reg No to search..."
                                    autocomplete="off" />
                             <datalist id="studentListMaintenance">
                                 @foreach (var s in students)
@@ -34,7 +34,7 @@
                             </datalist>
                             <input type="hidden" asp-for="StudentId" id="maintenanceStudentIdHidden" />
                             <input type="hidden" asp-for="RoomId" id="maintenanceRoomIdHidden" />
-                            <small class="text-muted">If two students share the same name, use the TC number to select the correct one.</small>
+                            <small class="text-muted">If two students share the same name, use the Registration Number to select the correct one.</small>
                         </div>
 
                         <!-- Room selector (also auto-filled when student selected) -->

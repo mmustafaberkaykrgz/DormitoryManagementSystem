@@ -36,7 +36,7 @@ namespace DormitoryManagementSystem.Controllers
         }
 
         // GET: Dues/Create
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Staff")]
         public IActionResult Create()
         {
             ViewBag.Students = _context.Students.ToList();
@@ -45,7 +45,7 @@ namespace DormitoryManagementSystem.Controllers
 
         // POST: Dues/Create
         [HttpPost]
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Staff")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StudentId,Amount,DueDate,Description")] DuesAndPenalty due)
         {
@@ -61,7 +61,7 @@ namespace DormitoryManagementSystem.Controllers
 
         // POST: Dues/MarkAsPaid/5
         [HttpPost]
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> MarkAsPaid(int id)
         {
             var due = await _context.DuesAndPenalties.FindAsync(id);

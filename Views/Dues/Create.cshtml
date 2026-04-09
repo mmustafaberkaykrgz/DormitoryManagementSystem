@@ -19,10 +19,7 @@
                     <!-- Student search with TC disambiguation -->
                     <div class="form-group mb-4">
                         <label class="form-label fw-bold text-secondary">Target Student</label>
-                        <input list="studentListDues" 
-                               id="studentSearchInput" 
-                               class="form-control form-control-lg bg-light border-0" 
-                               placeholder="Type name or TC to search..." 
+                               placeholder="Type name or Reg No to search..." 
                                autocomplete="off" />
                         <datalist id="studentListDues">
                             @foreach (var s in students)
@@ -31,7 +28,7 @@
                             }
                         </datalist>
                         <input type="hidden" asp-for="StudentId" id="studentIdHidden" />
-                        <small class="text-muted">If two students share the same name, use the TC number to identify the correct one.</small>
+                        <small class="text-muted">If two students share the same name, use the Registration Number to identify the correct one.</small>
                     </div>
 
                     <div class="row">

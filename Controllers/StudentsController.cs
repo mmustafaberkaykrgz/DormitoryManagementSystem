@@ -51,7 +51,7 @@ namespace DormitoryManagementSystem.Controllers
             return View(students);
         }
 
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Staff")]
         public IActionResult Create()
         {
             ViewBag.Rooms = _context.Rooms.Select(r => new {
@@ -62,7 +62,7 @@ namespace DormitoryManagementSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Staff")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Surname,StudentId,Email,PhoneNumber,RoomId,MembStartDate,MembEndDate")] Student student)
         {
@@ -138,7 +138,7 @@ namespace DormitoryManagementSystem.Controllers
             return View(student);
         }
 
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -152,7 +152,7 @@ namespace DormitoryManagementSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Staff")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,StudentId,Email,PhoneNumber,RoomId,MembStartDate,MembEndDate,UserId")] Student student)
         {
@@ -202,7 +202,7 @@ namespace DormitoryManagementSystem.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Staff")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

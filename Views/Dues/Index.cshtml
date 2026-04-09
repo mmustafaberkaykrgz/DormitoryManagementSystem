@@ -9,7 +9,7 @@
             <span>Dues, payments & outstanding balances</span>
         </div>
     </div>
-    @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+    @if (User.IsInRole("Staff"))
     {
         <a asp-action="Create" class="btn-primary-action" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
             <i class="bi bi-plus-lg"></i> Add Due / Penalty
@@ -61,7 +61,10 @@
                     <th style="width: 15%;">Type</th>
                     <th style="width: 15%;">Amount (₺)</th>
                     <th style="width: 15%;">Status</th>
-                    <th style="text-align:right;padding-right:20px; width: 20%;">Action</th>
+                    @if (User.IsInRole("Staff"))
+                    {
+                        <th style="text-align:right;padding-right:20px; width: 20%;">Action</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -112,24 +115,23 @@
                                 </span>
                             }
                         </td>
-                        <td style="text-align:right;padding-right:20px;">
-                            @if (!item.IsPaid && (User.IsInRole("Admin") || User.IsInRole("Staff")))
-                            {
-                                <form asp-action="MarkAsPaid" asp-route-id="@item.Id" method="post" style="display:inline;">
-                                    <button type="submit" class="btn-action btn-resolve" style="padding:6px 14px; font-size:0.75rem;">
-                                        <i class="bi bi-check2"></i> Mark Paid
-                                    </button>
-                                </form>
-                            }
-                            else if (item.IsPaid)
-                            {
-                                <span style="color:#94a3b8;font-size:0.75rem;"><i class="bi bi-check-all"></i> Settled</span>
-                            }
-                            else
-                            {
-                                <span style="color:#cbd5e1;font-size:0.72rem;">Pending</span>
-                            }
-                        </td>
+                        @if (User.IsInRole("Staff"))
+                        {
+                            <td style="text-align:right;padding-right:20px;">
+                                @if (!item.IsPaid)
+                                {
+                                    <form asp-action="MarkAsPaid" asp-route-id="@item.Id" method="post" style="display:inline;">
+                                        <button type="submit" class="btn-action btn-resolve" style="padding:6px 14px; font-size:0.75rem;">
+                                            <i class="bi bi-check2"></i> Mark Paid
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span style="color:#94a3b8;font-size:0.75rem;"><i class="bi bi-check-all"></i> Settled</span>
+                                }
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
