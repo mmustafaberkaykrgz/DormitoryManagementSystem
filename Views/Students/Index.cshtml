@@ -11,9 +11,14 @@
     </div>
     @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
     {
-        <a asp-action="Create" class="btn-primary-action">
-            <i class="bi bi-person-plus-fill"></i> Register Student
-        </a>
+        <div class="d-flex flex-column gap-2">
+            <a asp-action="Create" class="btn-primary-action">
+                <i class="bi bi-person-plus-fill"></i> Register Student
+            </a>
+            <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#searchStudentModal">
+                <i class="bi bi-search me-2"></i> Search Student
+            </button>
+        </div>
     }
 </div>
 
@@ -70,7 +75,7 @@
                     <tr>
                         <td colspan="7" style="text-align:center; padding:48px 20px; color:#94a3b8;">
                             <i class="bi bi-people" style="font-size:2.5rem; display:block; margin-bottom:10px; opacity:0.4;"></i>
-                            No students registered yet.
+                            No students found.
                         </td>
                     </tr>
                 }
@@ -127,5 +132,50 @@
                 }
             </tbody>
         </table>
+    </div>
+
+    <!-- Pagination Footer -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="card-footer bg-white border-0 p-4 pt-0">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0 gap-2">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                            <a class="page-link rounded-pill px-3 py-2 fw-bold @(ViewBag.CurrentPage == i ? "shadow-sm" : "border-0")" 
+                               href="@Url.Action("Index", new { page = i, search = ViewBag.SearchTerm })">
+                                Page @i
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
+</div>
+
+<!-- Search Modal -->
+<div class="modal fade" id="searchStudentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-0 p-4 pb-0">
+                <h5 class="modal-title fw-bold" style="color: #1A1F5E;">Search Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Index" method="get">
+                <div class="modal-body p-4">
+                    <p class="text-muted small mb-4">Search by TC Identity Number, First Name, or Last Name to find a specific resident.</p>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="bi bi-search text-primary"></i></span>
+                        <input type="text" name="search" class="form-control bg-light border-0" placeholder="TC Identity No or Name" value="@ViewBag.SearchTerm">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Search Now</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

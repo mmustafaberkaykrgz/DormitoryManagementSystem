@@ -18,11 +18,43 @@ namespace DormitoryManagementSystem.Controllers
             _context = context;
         }
 
-        // MISSION 1: Send the list of rooms to the screen (to the View window).
-        public IActionResult Index()
+        // MISSION 1: Send the list of rooms to the screen with Paging & Search support
+        public async Task<IActionResult> Index(int page = 1, string search = null)
         {
-            var rooms = _context.Rooms.ToList(); // Go to the database, grab all the rooms, and put them in a list
-            return View(rooms); // Send this list to the "View" window where people can see it
+            int pageSize = 10;
+            var query = _context.Rooms.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(r => r.RoomNumber.Contains(search));
+            }
+
+            int totalItems = await query.CountAsync();
+            var rooms = await query
+                .OrderBy(r => r.RoomNumber)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            ViewBag.SearchTerm = search;
+            ViewBag.TotalCount = totalItems;
+
+            return View(rooms);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var room = await _context.Rooms
+                .Include(r => r.Students)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (room == null) return NotFound();
+
+            return View(room);
         }
 
         // MISSION 2: Show the form to add a new room

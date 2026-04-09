@@ -11,9 +11,14 @@
     </div>
     @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
     {
-        <a asp-controller="Rooms" asp-action="Create" class="btn-primary-action">
-            <i class="bi bi-plus-lg"></i> Add New Room
-        </a>
+        <div class="d-flex flex-column gap-2">
+            <a asp-controller="Rooms" asp-action="Create" class="btn-primary-action">
+                <i class="bi bi-plus-lg"></i> Add New Room
+            </a>
+            <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#searchRoomModal">
+                <i class="bi bi-search me-2"></i> Search Room
+            </button>
+        </div>
     }
 </div>
 
@@ -55,16 +60,16 @@
                 </tr>
             </thead>
             <tbody>
-                @if (!Model.Any())
+                 @if (!Model.Any())
                 {
                     <tr>
                         <td colspan="4" style="text-align:center;padding:48px 20px;color:#94a3b8;">
                             <i class="bi bi-door-open" style="font-size:2.5rem;display:block;margin-bottom:10px;opacity:0.4;"></i>
-                            No rooms added yet.
+                            No rooms found.
                         </td>
                     </tr>
                 }
-                @{ int rowIndex = 1; }
+                @{ int rowIndex = ((ViewBag.CurrentPage - 1) * 10) + 1; }
                 @foreach (var room in Model)
                 {
                     <tr>
@@ -89,8 +94,9 @@
                         @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
                         {
                             <td style="text-align:right;padding-right:20px;">
-                                <div style="display:flex;gap:6px;justify-content:flex-end;">
-                                    <a asp-action="Edit" asp-route-id="@room.Id" class="btn-action btn-edit"><i class="bi bi-pencil"></i> Edit</a>
+                                 <div style="display:flex;gap:6px;justify-content:flex-end;">
+                                    <a asp-action="Details" asp-route-id="@room.Id" class="btn-action btn-view"><i class="bi bi-eye"></i> View</a>
+                                    <a asp-action="Edit" asp-route-id="@room.Id" class="btn-action btn-edit"><i class="bi bi-pencil"></i></a>
                                     <form asp-action="Delete" asp-route-id="@room.Id" method="post" style="display:inline;">
                                         @Html.AntiForgeryToken()
                                         <button type="submit" class="btn-action btn-delete" onclick="return confirm('Delete this room?')">
@@ -104,6 +110,50 @@
                     rowIndex++;
                 }
             </tbody>
-        </table>
+         </table>
+    </div>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="card-footer bg-white border-0 p-4 pt-0">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0 gap-2">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                            <a class="page-link rounded-pill px-3 py-2 fw-bold @(ViewBag.CurrentPage == i ? "shadow-sm" : "border-0")" 
+                               href="@Url.Action("Index", new { page = i, search = ViewBag.SearchTerm })">
+                                Page @i
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
+</div>
+
+<!-- Search Modal -->
+<div class="modal fade" id="searchRoomModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-0 p-4 pb-0">
+                <h5 class="modal-title fw-bold" style="color: #1A1F5E;">Search Room</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Index" method="get">
+                <div class="modal-body p-4">
+                    <p class="text-muted small mb-4">Enter a room number to quickly filter results or find a specific unit.</p>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="bi bi-search text-primary"></i></span>
+                        <input type="text" name="search" class="form-control bg-light border-0" placeholder="Room Number (e.g. A1, 101)" value="@ViewBag.SearchTerm">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Search Now</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

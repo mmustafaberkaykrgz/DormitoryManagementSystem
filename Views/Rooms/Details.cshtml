@@ -1,0 +1,113 @@
+@model DormitoryManagementSystem.Models.Room
+@{
+    ViewData["Title"] = "Room Details";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10">
+        <div class="page-header mb-4" data-aos="fade-down">
+            <div>
+                <div class="page-title">Room @Model.RoomNumber - Details
+                    <span>Capacity and currently residing students</span>
+                </div>
+            </div>
+            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <!-- Room Info Card -->
+            <div class="col-md-4" data-aos="fade-right">
+                <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+                    <div class="text-center mb-4">
+                        <div style="width:70px;height:70px;border-radius:15px;background:#eff6ff;color:#1A3A8A;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 15px;">
+                            <i class="bi bi-door-open-fill"></i>
+                        </div>
+                        <h3 class="fw-bold mb-1">Room @Model.RoomNumber</h3>
+                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">Inventory #@Model.Id</span>
+                    </div>
+
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background:#f8faff;">
+                            <span class="text-muted fw-bold small">Total Capacity</span>
+                            <span class="fw-bold">@Model.Capacity Beds</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background:#f0fdf4;">
+                            <span class="text-muted fw-bold small">Occupied</span>
+                            <span class="fw-bold text-success">@(Model.Students?.Count ?? 0) Beds</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background:#fffaf0;">
+                            <span class="text-muted fw-bold small">Available</span>
+                            <span class="fw-bold text-warning">@(Model.Capacity - (Model.Students?.Count ?? 0)) Beds</span>
+                        </div>
+                    </div>
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+                    {
+                        <div class="mt-4">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
+                                <i class="bi bi-pencil me-2"></i>Edit Room
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Residents Card -->
+            <div class="col-md-8" data-aos="fade-left">
+                <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                    <div class="card-header bg-white border-0 p-4 pb-0">
+                        <div class="d-flex align-items-center gap-2" style="font-weight:800; color:#1A1F5E; font-size:1.1rem;">
+                            <i class="bi bi-people-fill text-primary"></i> Current Residents
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="text-secondary small fw-bold text-uppercase">
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>TC Identity</th>
+                                        <th>Management</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Students == null || !Model.Students.Any())
+                                    {
+                                        <tr>
+                                            <td colspan="3" class="text-center py-5 text-muted">
+                                                <i class="bi bi-person-x opacity-25 fs-1 d-block mb-2"></i>
+                                                This room is currently empty.
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var student in Model.Students)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <div class="user-avatar" style="width:38px;height:38px;font-size:0.9rem;">@(student.Name?.Substring(0,1).ToUpper())</div>
+                                                        <div class="fw-bold">@student.Name @student.Surname</div>
+                                                    </div>
+                                                </td>
+                                                <td class="small text-muted font-monospace">@student.NationalId</td>
+                                                <td>
+                                                    <a asp-controller="Students" asp-action="Details" asp-route-id="@student.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                        <i class="bi bi-eye"></i> Profile
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,9 +17,11 @@ namespace DormitoryManagementSystem.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string search = null)
         {
+            int pageSize = 10;
             var query = _context.Students.Include(s => s.Room).AsQueryable();
+            
             if (User.IsInRole("Student"))
             {
                 var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -28,7 +30,25 @@ namespace DormitoryManagementSystem.Controllers
                     query = query.Where(s => s.UserId == userId);
                 }
             }
-            return View(await query.ToListAsync());
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.NationalId.Contains(search) || s.Name.Contains(search) || s.Surname.Contains(search));
+            }
+
+            int totalItems = await query.CountAsync();
+            var students = await query
+                .OrderBy(s => s.Surname)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            ViewBag.SearchTerm = search;
+            ViewBag.TotalCount = totalItems;
+
+            return View(students);
         }
 
         [Authorize(Roles = "Admin,Staff")]
