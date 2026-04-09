@@ -409,7 +409,7 @@ else
                 data: {
                     labels: ['Collected', 'Outstanding'],
                     datasets: [{
-                        data: [@ViewBag.TotalPaid, @ViewBag.TotalUnpaid],
+                        data: [@(((decimal)(ViewBag.TotalPaid ?? 0m)).ToString(System.Globalization.CultureInfo.InvariantCulture)), @(((decimal)(ViewBag.TotalUnpaid ?? 0m)).ToString(System.Globalization.CultureInfo.InvariantCulture))],
                         backgroundColor: ['#2D7D4A', '#dc2626'],
                         borderWidth: 0,
                         hoverOffset: 8
