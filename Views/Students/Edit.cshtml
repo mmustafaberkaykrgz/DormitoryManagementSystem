@@ -42,6 +42,14 @@
                             <span asp-validation-for="Email" class="text-danger small"></span>
                         </div>
                         <div class="col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label fw-bold text-secondary"></label>
+                            <input asp-for="PhoneNumber" class="form-control form-control-lg bg-light border-0" placeholder="+90 5XX XXX XX XX" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-12">
                             <label asp-for="RoomId" class="form-label fw-bold text-secondary">Assigned Room</label>
                             <select asp-for="RoomId" class="form-select form-select-lg bg-light border-0" asp-items="@(new SelectList(ViewBag.Rooms, "Id", "DisplayText"))" required>
                                 <option value="" disabled>-- Please select a room --</option>
