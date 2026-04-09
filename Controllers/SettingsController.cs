@@ -23,10 +23,10 @@ namespace DormitoryManagementSystem.Controllers
         {
             var viewModel = new SettingsViewModel();
             bool isAdmin = User.IsInRole("Admin");
-            if (isAdmin || User.IsInRole("Staff"))
+            if (isAdmin)
             {
                 // Load Global Settings
-                var dict = await _context.SystemSettings.ToDictionaryAsync(s => s.KeyName, s => s.Value);
+                var dict = await _context.SystemSettings.AsNoTracking().ToDictionaryAsync(s => s.KeyName, s => s.Value);
                 viewModel.GlobalSettings.DormitoryName = dict.GetValueOrDefault("DormitoryName", "My Dorm");
                 viewModel.GlobalSettings.DormitoryAddress = dict.GetValueOrDefault("DormitoryAddress", "");
                 viewModel.GlobalSettings.ContactPhone = dict.GetValueOrDefault("ContactPhone", "");
@@ -35,11 +35,8 @@ namespace DormitoryManagementSystem.Controllers
                 viewModel.GlobalSettings.LatePenaltyFee = decimal.TryParse(dict.GetValueOrDefault("LatePenaltyFee", "0"), out var p) ? p : 0;
 
                 // Load User Lists (Admins & Staff)
-                if (isAdmin)
-                {
-                    viewModel.AdminList = await _context.Admins.AsNoTracking().Include(a => a.User!).ThenInclude(u => u!.Role).ToListAsync();
-                    viewModel.StaffList = await _context.Staffs.AsNoTracking().Include(s => s.User!).ThenInclude(u => u!.Role).ToListAsync();
-                }
+                viewModel.AdminList = await _context.Admins.AsNoTracking().Include(a => a.User!).ThenInclude(u => u!.Role).ToListAsync();
+                viewModel.StaffList = await _context.Staffs.AsNoTracking().Include(s => s.User!).ThenInclude(u => u!.Role).ToListAsync();
 
                 // Load Audit Logs (last 100)
                 viewModel.RecentLogs = await _context.AuditLogs

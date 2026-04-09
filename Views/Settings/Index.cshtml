@@ -107,31 +107,32 @@
 <div class="row g-0">
     <div class="col-12 text-center mt-3">
         <ul class="nav nav-pills settings-tabs-container" id="settingsTabs" role="tablist">
-            @if (isAdmin || isStaff)
+            @if (isAdmin)
             {
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">
                         <i class="bi bi-building"></i> General
                     </button>
                 </li>
-                @if (isAdmin)
-                {
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="addstaff-tab" data-bs-toggle="tab" data-bs-target="#addstaff" type="button" role="tab" aria-controls="addstaff" aria-selected="false">
-                            <i class="bi bi-person-plus-fill"></i> Add Staff
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="false">
-                            <i class="bi bi-people-fill"></i> Users
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab" aria-controls="security" aria-selected="false">
-                            <i class="bi bi-shield-lock-fill"></i> Security
-                        </button>
-                    </li>
-                }
+            }
+
+            @if (isAdmin)
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="addstaff-tab" data-bs-toggle="tab" data-bs-target="#addstaff" type="button" role="tab" aria-controls="addstaff" aria-selected="false">
+                        <i class="bi bi-person-plus-fill"></i> Add Staff
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="false">
+                        <i class="bi bi-people-fill"></i> Users
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab" aria-controls="security" aria-selected="false">
+                        <i class="bi bi-shield-lock-fill"></i> Security
+                    </button>
+                </li>
             }
             
             @if (isStudent)
@@ -144,7 +145,7 @@
             }
 
             <li class="nav-item" role="presentation">
-                <button class="nav-link @(isStudent ? "" : "")" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                <button class="nav-link @(isStaff ? "active" : "")" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="@(isStaff ? "true" : "false")">
                     <i class="bi bi-shield-lock"></i> Security
                 </button>
             </li>
@@ -156,7 +157,7 @@
     <div class="card-body p-4 p-md-5">
         <div class="tab-content" id="settingsTabsContent">
             
-            @if (isAdmin || isStaff)
+            @if (isAdmin)
             {
                 <!-- Tab 1: General/Financial -->
                 <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
@@ -525,7 +526,7 @@
             }
 
             <!-- Tab 4: Profile Settings (Password) -->
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="tab-pane fade @(isStaff ? "show active" : "")" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div class="row justify-content-center py-4">
                     <div class="col-md-7">
                         <div class="form-section-title text-center justify-content-center mb-4"><i class="bi bi-shield-lock"></i> Update Your Credentials</div>
