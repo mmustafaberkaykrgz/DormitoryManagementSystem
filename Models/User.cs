@@ -13,6 +13,10 @@ namespace DormitoryManagementSystem.Models
         public int RoleId { get; set; } // [cite: 81]
         public Role? Role { get; set; } // Navigation Property [cite: 477]
 
-        public bool IsActive { get; set; } = true; // [cite: 81, 834]
+        public bool IsActive { get; set; } = true; 
+
+        // Password Reset Fields
+        public string? ResetToken { get; set; }
+        public DateTime? ResetTokenExpiration { get; set; }
     }
 }

@@ -195,6 +195,108 @@ namespace DormitoryManagementSystem.Controllers
             return RedirectToAction("Login");
         }
 
+        // ─────────────── FORGOT PASSWORD ───────────────
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            ModelState.Remove("Username");
+            ModelState.Remove("StudentId");
+
+            if (!ModelState.IsValid) return View(model);
+
+            User? user = null;
+            if (model.SelectedRole == "Student")
+            {
+                if (string.IsNullOrWhiteSpace(model.StudentId))
+                {
+                    ModelState.AddModelError("StudentId", "Registration Number is required.");
+                    return View(model);
+                }
+                var student = await _context.Students.Include(s => s.User).FirstOrDefaultAsync(s => s.StudentId == model.StudentId);
+                user = student?.User;
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.Username))
+                {
+                    ModelState.AddModelError("Username", "Username is required.");
+                    return View(model);
+                }
+                user = await _context.Users.Include(u => u.Role)
+                    .FirstOrDefaultAsync(u => u.Username.ToLower() == model.Username.ToLower() && u.Role != null && u.Role.RoleName == model.SelectedRole);
+            }
+
+            if (user != null)
+            {
+                // Generate Token
+                user.ResetToken = Guid.NewGuid().ToString();
+                user.ResetTokenExpiration = DateTime.Now.AddHours(1);
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+
+                // Redirect to simulation page
+                return RedirectToAction("ForgotPasswordSimulation", new { token = user.ResetToken });
+            }
+
+            ModelState.AddModelError(string.Empty, "User not found with the provided information.");
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordSimulation(string token)
+        {
+            if (string.IsNullOrEmpty(token)) return RedirectToAction("Login");
+            ViewBag.Token = token;
+            // Generate the full URL for the simulation link
+            ViewBag.ResetLink = Url.Action("ResetPassword", "Account", new { token = token }, Request.Scheme);
+            return View();
+        }
+
+        // ─────────────── RESET PASSWORD ───────────────
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string token)
+        {
+            if (string.IsNullOrEmpty(token)) return RedirectToAction("Login");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == token && u.ResetTokenExpiration > DateTime.Now);
+            if (user == null)
+            {
+                TempData["Error"] = "The reset link is invalid or has expired.";
+                return RedirectToAction("Login");
+            }
+
+            return View(new ResetPasswordViewModel { Token = token });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == model.Token && u.ResetTokenExpiration > DateTime.Now);
+            if (user == null)
+            {
+                TempData["Error"] = "The reset link is invalid or has expired.";
+                return RedirectToAction("Login");
+            }
+
+            // Update Password
+            user.PasswordHash = model.NewPassword;
+            user.ResetToken = null;
+            user.ResetTokenExpiration = null;
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Your password has been reset successfully. You can now log in with your new password.";
+            return RedirectToAction("Login");
+        }
+
         // ─────────────── LOGOUT ───────────────
         public async Task<IActionResult> Logout()
         {

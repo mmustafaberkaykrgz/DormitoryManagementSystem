@@ -325,6 +325,20 @@
             </div>
 
             <div class="login-body">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show mb-4 py-2 small" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="padding: 0.5rem;"></button>
+                    </div>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show mb-4 py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="padding: 0.5rem;"></button>
+                    </div>
+                }
                 <form asp-action="Login" method="post" id="loginForm">
                     @if (ViewData.ModelState.ErrorCount > 0)
                     {
@@ -387,6 +401,7 @@
                             <input class="form-check-input" asp-for="RememberMe" id="rememberMe" />
                             <label class="form-check-label text-muted small" for="rememberMe">Remember me</label>
                         </div>
+                        <a asp-action="ForgotPassword" class="text-decoration-none small fw-bold" style="color:#64748b;">Forgot Password?</a>
                     </div>
 
                     <button type="submit" class="btn-login">
