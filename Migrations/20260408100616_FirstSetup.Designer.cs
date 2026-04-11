@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using DormitoryManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DormitoryManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260408100616_IlkKurulum")]
-    partial class IlkKurulum
+    [Migration("20260408100616_FirstSetup")]
+    partial class FirstSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
