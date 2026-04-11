@@ -1,7 +1,8 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model DormitoryManagementSystem.Models.DuesAndPenalty
 @{
     ViewData["Title"] = "Create Due/Penalty";
-    var students = (IEnumerable<DormitoryManagementSystem.Models.Student>)ViewBag.Students;
+    var students = (ViewData["Students"] as IEnumerable<SelectListItem>) ?? new List<SelectListItem>();
 }
 
 <div class="row justify-content-center mt-4">
@@ -26,7 +27,7 @@
                         <datalist id="studentListDues">
                             @foreach (var s in students)
                             {
-                                <option value="@s.FullNameWithRegNo" data-id="@s.Id">@s.FullNameWithRegNo</option>
+                                <option value="@s.Text" data-id="@s.Value">@s.Text</option>
                             }
                         </datalist>
                         <input type="hidden" asp-for="StudentId" id="studentIdHidden" />
@@ -46,7 +47,7 @@
                         </div>
                         <div class="col-md-6 form-group mb-4">
                             <label asp-for="DueDate" class="form-label fw-bold text-secondary">Deadline Date</label>
-                            <input asp-for="DueDate" type="text" class="form-control form-control-lg bg-light border-0 flatpickr-date" placeholder="Select Due Date" />
+                            <input asp-for="DueDate" type="text" class="form-control form-control-lg bg-light border-0 flatpickr-date" placeholder="Select Due Date" value="@(Model.DueDate.Year <= 1 ? "" : Model.DueDate.ToString("yyyy-MM-dd"))" />
                             <span asp-validation-for="DueDate" class="text-danger small"></span>
                         </div>
                     </div>
@@ -54,6 +55,7 @@
                     <div class="form-group mb-4">
                         <label asp-for="Description" class="form-label fw-bold text-secondary">Reason / Note</label>
                         <textarea asp-for="Description" class="form-control bg-light border-0" rows="3" placeholder="Explain the reason for this penalty or due..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
                     </div>
 
                     <div class="d-flex justify-content-between mt-5">

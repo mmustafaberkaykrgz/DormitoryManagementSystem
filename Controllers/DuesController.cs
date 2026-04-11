@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using DormitoryManagementSystem.Data;
 using DormitoryManagementSystem.Models;
 
@@ -37,10 +38,16 @@ namespace DormitoryManagementSystem.Controllers
 
         // GET: Dues/Create
         [Authorize(Roles = "Staff")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Students = _context.Students.ToList();
-            return View();
+            var students = await _context.Students.AsNoTracking().ToListAsync();
+            ViewData["Students"] = students.Select(s => new SelectListItem 
+            { 
+                Value = s.Id.ToString(), 
+                Text = s.FullNameWithRegNo 
+            }).ToList();
+            
+            return View(new DuesAndPenalty());
         }
 
         // POST: Dues/Create
@@ -55,7 +62,13 @@ namespace DormitoryManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Students = _context.Students.ToList();
+            var students = await _context.Students.AsNoTracking().ToListAsync();
+            ViewData["Students"] = students.Select(s => new SelectListItem 
+            { 
+                Value = s.Id.ToString(), 
+                Text = s.FullNameWithRegNo 
+            }).ToList();
+
             return View(due);
         }
 
