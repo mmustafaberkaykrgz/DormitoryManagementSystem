@@ -217,9 +217,16 @@ namespace DormitoryManagementSystem.Controllers
 
             try
             {
+                // Also find and remove the associated User account
+                var user = await _context.Users.FindAsync(student.UserId);
+                if (user != null)
+                {
+                    _context.Users.Remove(user);
+                }
+
                 _context.Students.Remove(student);
                 await _context.SaveChangesAsync();
-                TempData["Success"] = "Student record deleted successfully.";
+                TempData["Success"] = "Student record and associated login account deleted successfully.";
             }
             catch (Exception ex)
             {
