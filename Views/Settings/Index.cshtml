@@ -385,6 +385,13 @@
                                                         @(item.User?.IsActive == true ? "Disable" : "Enable")
                                                     </button>
                                                 </form>
+
+                                                <form asp-action="DeletePersonnel" method="post" class="d-inline">
+                                                    <input type="hidden" name="userId" value="@item.User?.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold ms-1" style="font-size:0.75rem;" onclick="return confirmDelete(this.form, 'ARE YOU SURE? This will permanently delete this personnel account and all their activity logs. This action cannot be undone.');">
+                                                        <i class="bi bi-trash3"></i> Delete
+                                                    </button>
+                                                </form>
                                             }
                                             else
                                             {
@@ -422,6 +429,13 @@
                                                     <button type="submit" class="btn btn-sm btn-outline-@(item.User?.IsActive == true ? "danger" : "success") rounded-pill px-3 fw-bold" style="font-size:0.75rem;">
                                                         <i class="bi @(item.User?.IsActive == true ? "bi-person-x" : "bi-person-check")"></i> 
                                                         @(item.User?.IsActive == true ? "Disable" : "Enable")
+                                                    </button>
+                                                </form>
+
+                                                <form asp-action="DeletePersonnel" method="post" class="d-inline">
+                                                    <input type="hidden" name="userId" value="@item.User?.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold ms-1" style="font-size:0.75rem;" onclick="return confirmDelete(this.form, 'ARE YOU SURE? This will permanently delete this staff account and all their activity logs. This action cannot be undone.');">
+                                                        <i class="bi bi-trash3"></i> Delete
                                                     </button>
                                                 </form>
                                             }

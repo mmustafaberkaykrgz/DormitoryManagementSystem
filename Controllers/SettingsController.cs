@@ -283,6 +283,54 @@ namespace DormitoryManagementSystem.Controllers
             return Redirect(Url.Action("Index") + "#users");
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePersonnel(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return NotFound();
+
+            // Prevent self-deletion
+            var currentUserIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (currentUserIdStr == userId.ToString())
+            {
+                TempData["Error"] = "You cannot delete your own account.";
+                return Redirect(Url.Action("Index") + "#users");
+            }
+
+            try
+            {
+                // 1. Remove associated Personnel (Admin or Staff)
+                var admin = await _context.Admins.FirstOrDefaultAsync(a => a.UserId == userId);
+                if (admin != null) _context.Admins.Remove(admin);
+
+                var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.UserId == userId);
+                if (staff != null) _context.Staffs.Remove(staff);
+
+                // 2. Remove dependencies (Logs, Notifications)
+                var logs = _context.AuditLogs.Where(l => l.UserId == userId);
+                _context.AuditLogs.RemoveRange(logs);
+
+                var notifications = _context.Notifications.Where(n => n.UserId == userId);
+                _context.Notifications.RemoveRange(notifications);
+
+                // 3. Remove User
+                _context.Users.Remove(user);
+
+                await LogAction($"Deleted personnel account: {user.Username} (ID: {userId})");
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "The personnel account and all associated data have been permanently deleted.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred during deletion: " + ex.Message;
+            }
+
+            return Redirect(Url.Action("Index") + "#users");
+        }
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DownloadBackup()

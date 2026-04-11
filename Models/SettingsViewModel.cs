@@ -63,7 +63,7 @@ namespace DormitoryManagementSystem.Models
         public decimal DefaultMonthlyDue { get; set; } = 0;
 
         [Required]
-        [Display(Name = "Late Penalty Fee (₺)")]
+        [Display(Name = "Default Late Penalty Fee (₺)")]
         [Range(0, 50000)]
         public decimal LatePenaltyFee { get; set; } = 0;
     }
