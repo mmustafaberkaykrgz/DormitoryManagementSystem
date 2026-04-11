@@ -8,6 +8,9 @@ namespace DormitoryManagementSystem.Models
         public int UserId { get; set; }
         public User? User { get; set; }
 
+        // ─────────────── DATA VALIDATION & METADATA ───────────────
+        // [Required] ensures the data is strictly personal in the DB level
+        // [Display] controls the label text shown in Automated Razor Views
         [Required]
         [Display(Name = "First Name")]
         public string Name { get; set; } = string.Empty;

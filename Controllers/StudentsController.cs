@@ -26,10 +26,13 @@ namespace DormitoryManagementSystem.Controllers
             }
 
             int pageSize = 10;
+            // ─────────────── DATA RETRIEVAL (Eager Loading) ───────────────
+            // We use .Include() to perform a JOIN and fetch Room data in a single SQL query
             var query = _context.Students.AsNoTracking().Include(s => s.Room).AsQueryable();
             
             if (User.IsInRole("Student"))
             {
+                // SECURITY: Ensure students can only see their own record
                 var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (int.TryParse(userIdStr, out int userId))
                 {
@@ -86,7 +89,8 @@ namespace DormitoryManagementSystem.Controllers
                 }
             }
 
-            // Check Registration Number uniqueness
+            // ─────────────── BUSINESS LOGIC / VALIDATION ───────────────
+            // 1. Uniqueness check for Registration Number
             var idExists = await _context.Students.AnyAsync(s => s.StudentId == student.StudentId);
             if (idExists)
                 ModelState.AddModelError("StudentId", "This Registration Number is already registered in the system.");

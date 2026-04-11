@@ -41,7 +41,7 @@ namespace DormitoryManagementSystem.Controllers
 
             if (model.SelectedRole == "Student")
             {
-                // Students log in with Registration Number + password
+                // Students authenticate using their unique Dormitory Registration Number
                 if (string.IsNullOrWhiteSpace(model.StudentId))
                 {
                     ModelState.AddModelError("StudentId", "Dormitory Registration Number is required.");
@@ -64,7 +64,7 @@ namespace DormitoryManagementSystem.Controllers
             }
             else
             {
-                // Admin / Staff login with username + password
+                // Staff or Admins authenticate using their chosen Username
                 if (string.IsNullOrWhiteSpace(model.Username))
                 {
                     ModelState.AddModelError("Username", "Username is required.");
@@ -92,10 +92,8 @@ namespace DormitoryManagementSystem.Controllers
 
             if (user != null)
             {
-                // Load role if not already loaded
-                if (user.Role == null)
-                    await _context.Entry(user).Reference(u => u.Role).LoadAsync();
-
+                // ─────────────── IDENTITY & CLAIMS ───────────────
+                // Creating claims to store the user's role and ID in the encrypted cookie
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Username),
@@ -104,6 +102,7 @@ namespace DormitoryManagementSystem.Controllers
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                // Signing in the user with the specified authentication properties
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),

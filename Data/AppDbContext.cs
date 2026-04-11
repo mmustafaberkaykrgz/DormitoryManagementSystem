@@ -3,6 +3,8 @@ using DormitoryManagementSystem.Models;
 
 namespace DormitoryManagementSystem.Data
 {
+    // ─────────────── DATA ACCESS LAYER (EF Core) ───────────────
+    // This Class acts as the bridge between our C# Models and the SQLite Database
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
