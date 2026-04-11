@@ -82,7 +82,8 @@ namespace DormitoryManagementSystem.Controllers
                             Id = staff.Id,
                             Name = staff.Name,
                             Surname = staff.Surname,
-                            Email = staff.Email
+                            Email = staff.Email,
+                            PhoneNumber = staff.PhoneNumber
                         };
                     }
                 }
@@ -215,7 +216,7 @@ namespace DormitoryManagementSystem.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePersonnel(string Name, string Surname, string Email, string Username, string Password, string Role)
+        public async Task<IActionResult> CreatePersonnel(string Name, string Surname, string Email, string Username, string Password, string Role, string? PhoneNumber)
         {
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Surname) || 
                 string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Username) || 
@@ -245,7 +246,7 @@ namespace DormitoryManagementSystem.Controllers
                 }
                 else
                 {
-                    var staff = new Staff { Name = Name, Surname = Surname, Email = Email, UserId = user.Id };
+                    var staff = new Staff { Name = Name, Surname = Surname, Email = Email, UserId = user.Id, PhoneNumber = PhoneNumber };
                     _context.Staffs.Add(staff);
                 }
 
@@ -292,8 +293,14 @@ namespace DormitoryManagementSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // Log the backup action
             await LogAction("Downloaded a database backup");
             await _context.SaveChangesAsync();
+
+            // CRITICAL: Force a SQLite Checkpoint.
+            // In WAL mode, SQLite writes to a separate -wal file. 
+            // This command merges all changes from the -wal file back into the main .db file.
+            await _context.Database.ExecuteSqlRawAsync("PRAGMA wal_checkpoint(TRUNCATE);");
 
             // Since the SQLite database is potentially locked by the application, we open it with FileShare.ReadWrite
             byte[] bytes;

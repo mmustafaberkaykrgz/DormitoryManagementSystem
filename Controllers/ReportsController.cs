@@ -97,7 +97,25 @@ namespace DormitoryManagementSystem.Controllers
             var avgOverdueDays = overdueList.Any() ? overdueList.Average(o => o.DaysOverdue) : 0;
             ViewBag.AvgOverdueDays = Math.Round(avgOverdueDays, 0);
             ViewBag.TopOverdueDept = highestOverdueArea;
-            ViewBag.Q1Target       = totalTarget * 3;
+
+            // Calculate Occupancy for Dashboard
+            var totalCapacity = await _context.Rooms.AsNoTracking().SumAsync(r => r.Capacity);
+            var occupiedBeds  = await _context.Students.AsNoTracking().CountAsync(s => s.RoomId > 0);
+            var occupancyRate = totalCapacity > 0 ? Math.Round((double)occupiedBeds / totalCapacity * 100, 1) : 0;
+
+            ViewBag.TotalCapacity = totalCapacity;
+            ViewBag.OccupiedBeds = occupiedBeds;
+            ViewBag.OccupancyRate = occupancyRate;
+
+            // Dynamic Smart Recommendation
+            if (collectionRate < 70 && collectionRate > 0)
+                ViewBag.ManagementAction = $"Collection rate is critically low ({collectionRate}%). Urgently review overdue accounts and payment policies.";
+            else if (occupancyRate < 75)
+                ViewBag.ManagementAction = $"Occupancy is low ({occupancyRate}%). Consider promoting available rooms to attract more residents.";
+            else if (occupancyRate >= 95)
+                ViewBag.ManagementAction = $"Operating at near full capacity ({occupancyRate}%). Excellent utilization of resources.";
+            else
+                ViewBag.ManagementAction = $"System metrics are stable. Maintain resident satisfaction and facility standards.";
 
             ViewBag.DataAsOf = DateTime.Now.ToString("MMMM d, yyyy HH:mm:ss");
 

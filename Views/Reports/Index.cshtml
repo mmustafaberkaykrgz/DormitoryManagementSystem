@@ -8,7 +8,10 @@
     var highestOverdueArea = (string)(ViewBag.HighestOverdueArea ?? "N/A");
     var avgOverdueDays = (double)(ViewBag.AvgOverdueDays ?? 0.0);
     var topOverdueDept = (string)(ViewBag.TopOverdueDept ?? "N/A");
-    var q1Target = (decimal)(ViewBag.Q1Target ?? 0m);
+    var totalCapacity = (int)(ViewBag.TotalCapacity ?? 0);
+    var occupiedBeds = (int)(ViewBag.OccupiedBeds ?? 0);
+    var occupancyRate = (double)(ViewBag.OccupancyRate ?? 0.0);
+    var managementAction = (string)(ViewBag.ManagementAction ?? "Review system configurations.");
     var dataAsOf = (string)(ViewBag.DataAsOf ?? "");
 
     var collectedPct = totalTarget > 0 ? Math.Round((double)(collectedRevenue / totalTarget) * 100, 2) : 0;
@@ -229,14 +232,15 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="summary-item">
-                    <div class="s-label">Target for Q1 '26:</div>
-                    <div class="s-value">₺@q1Target.ToString("N0") (Targeted)</div>
+                <div class="summary-item" style="border-left: 4px solid #3b82f6;">
+                    <div class="s-label">Current Occupancy:</div>
+                    <div class="s-value">@occupancyRate% (@occupiedBeds / @totalCapacity Beds)</div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="management-action">
-                    <strong>Management Action Needed:</strong> Review DuesAndPenalties policy
+                <div class="management-action d-flex align-items-center h-100 m-0">
+                    <i class="bi bi-lightbulb-fill text-warning me-2" style="font-size: 1.1rem;"></i>
+                    <span><strong>Smart Insight:</strong> @managementAction</span>
                 </div>
             </div>
         </div>

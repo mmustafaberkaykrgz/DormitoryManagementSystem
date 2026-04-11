@@ -20,6 +20,10 @@ namespace DormitoryManagementSystem.Models
         [Display(Name = "E-Mail")]
         public string Email { get; set; } = string.Empty;
 
+        [Phone]
+        [Display(Name = "Phone Number")]
+        public string? PhoneNumber { get; set; }
+
         public string FullName => $"{Name} {Surname}";
     }
 }

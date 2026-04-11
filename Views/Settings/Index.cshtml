@@ -120,7 +120,7 @@
             {
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="addstaff-tab" data-bs-toggle="tab" data-bs-target="#addstaff" type="button" role="tab" aria-controls="addstaff" aria-selected="false">
-                        <i class="bi bi-person-plus-fill"></i> Add Staff
+                        <i class="bi bi-person-plus-fill"></i> Add Staff/Admin
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -201,14 +201,18 @@
                                 <label asp-for="GlobalSettings.DefaultMonthlyDue" class="form-label"></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₺</span>
-                                    <input asp-for="GlobalSettings.DefaultMonthlyDue" class="form-control" />
+                                    <input asp-for="GlobalSettings.DefaultMonthlyDue" class="form-control" 
+                                           value="@(Model.GlobalSettings.DefaultMonthlyDue == 0 ? "" : Model.GlobalSettings.DefaultMonthlyDue.ToString("F2"))" 
+                                           placeholder="0.00" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="GlobalSettings.LatePenaltyFee" class="form-label"></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₺</span>
-                                    <input asp-for="GlobalSettings.LatePenaltyFee" class="form-control" />
+                                    <input asp-for="GlobalSettings.LatePenaltyFee" class="form-control" 
+                                           value="@(Model.GlobalSettings.LatePenaltyFee == 0 ? "" : Model.GlobalSettings.LatePenaltyFee.ToString("F2"))" 
+                                           placeholder="0.00" />
                                 </div>
                             </div>
                             <div class="col-12 text-end mt-5">
@@ -224,7 +228,7 @@
                 <div class="tab-pane fade" id="addstaff" role="tabpanel" aria-labelledby="addstaff-tab">
                     <div class="row justify-content-center">
                         <div class="col-md-10">
-                            <div class="form-section-title"><i class="bi bi-person-plus-fill"></i> Create Staff Account</div>
+                            <div class="form-section-title"><i class="bi bi-person-plus-fill"></i> Create Staff/Admin Account</div>
                             <p class="text-muted small mb-4">Register a new personnel or administrator account with full personal and security details.</p>
 
                             <div class="card border-0 shadow-sm p-4 p-md-5" style="border-radius: 20px; background: #ffffff;">
@@ -240,7 +244,7 @@
                                             <div class="form-check p-0">
                                                 <input type="radio" class="btn-check" name="Role" id="roleStaff" value="Staff" checked>
                                                 <label class="btn btn-outline-success w-100 rounded-pill py-2 fw-bold" for="roleStaff">
-                                                    <i class="bi bi-person-badge me-1"></i> Staff Account
+                                                    <i class="bi bi-person-badge me-1"></i> Staff 
                                                 </label>
                                             </div>
                                         </div>
@@ -248,7 +252,7 @@
                                             <div class="form-check p-0">
                                                 <input type="radio" class="btn-check" name="Role" id="roleAdmin" value="Admin">
                                                 <label class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold" for="roleAdmin">
-                                                    <i class="bi bi-shield-lock me-1"></i> Admin Account
+                                                    <i class="bi bi-shield-lock me-1"></i> Admin 
                                                 </label>
                                             </div>
                                         </div>
@@ -296,6 +300,13 @@
                                                 <input name="Email" type="email" class="form-control" required placeholder="email@example.com" />
                                             </div>
                                         </div>
+                                        <div class="col-md-12" id="staffPhoneContainer">
+                                            <label class="form-label small fw-bold text-secondary">Phone Number</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                                                <input name="PhoneNumber" class="form-control" placeholder="+90 5XX XXX XX XX" />
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <!-- Security -->
@@ -313,7 +324,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label small fw-bold text-secondary">Action</label>
-                                            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
+                                            <button type="submit" id="createPersonnelBtn" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
                                                 <i class="bi bi-person-check-fill me-2"></i> Create Personnel Account
                                             </button>
                                         </div>
@@ -393,6 +404,7 @@
                                         </td>
                                         <td>
                                             <div class="small">@item.Email</div>
+                                            <div class="small fw-bold text-primary">@item.PhoneNumber</div>
                                             <div class="small text-muted">User: @item.User?.Username</div>
                                         </td>
                                         <td>
@@ -490,7 +502,7 @@
                                             <input asp-for="StudentInfo.Email" class="form-control bg-light" readonly disabled />
                                         </div>
                                     </div>
-                                    @if(isStudent)
+                                    @if(isStudent || isStaff)
                                     {
                                         <div class="col-md-6">
                                             <label asp-for="StudentInfo.PhoneNumber" class="form-label"></label>
@@ -499,6 +511,9 @@
                                                 <input asp-for="StudentInfo.PhoneNumber" class="form-control bg-light" readonly disabled placeholder="+90 5XX XXX XX XX" />
                                             </div>
                                         </div>
+                                    }
+                                    @if(isStudent)
+                                    {
                                         <div class="col-md-6">
                                             <label class="form-label">Attached Room</label>
                                             <div class="input-group">
@@ -596,6 +611,30 @@
                     }
                 });
             });
+
+            // Dynamic logic for Create Staff/Admin button text and phone field visibility
+            const roleStaff = document.getElementById('roleStaff');
+            const roleAdmin = document.getElementById('roleAdmin');
+            const submitBtn = document.getElementById('createPersonnelBtn');
+            const phoneContainer = document.getElementById('staffPhoneContainer');
+
+            if (roleStaff && roleAdmin && submitBtn) {
+                const updateUI = () => {
+                    if (roleAdmin.checked) {
+                        submitBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> Create Admin Account';
+                        if (phoneContainer) phoneContainer.style.display = 'none';
+                    } else if (roleStaff.checked) {
+                        submitBtn.innerHTML = '<i class="bi bi-person-badge-fill me-2"></i> Create Staff Account';
+                        if (phoneContainer) phoneContainer.style.display = 'block';
+                    }
+                };
+
+                roleStaff.addEventListener('change', updateUI);
+                roleAdmin.addEventListener('change', updateUI);
+                
+                // Initialize visibility on load
+                updateUI();
+            }
         });
     </script>
 }

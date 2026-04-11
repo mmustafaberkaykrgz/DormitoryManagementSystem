@@ -71,11 +71,13 @@ namespace DormitoryManagementSystem.Controllers
                     return View(model);
                 }
 
-                var lowerUsername = model.Username.ToLower();
-                var potentialUser = await _context.Users
+                var potentialUsers = await _context.Users
                     .Include(u => u.Role)
-                    .FirstOrDefaultAsync(u => u.Username.ToLower() == lowerUsername
-                                           && u.Role != null && u.Role.RoleName == model.SelectedRole);
+                    .Where(u => u.Role != null && u.Role.RoleName == model.SelectedRole)
+                    .ToListAsync();
+                
+                var potentialUser = potentialUsers.FirstOrDefault(u => 
+                    u.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
                 
                 if (potentialUser != null && potentialUser.PasswordHash == model.Password)
                 {
