@@ -1,199 +1,183 @@
 # 🏠 Dormitory Management System
 
-> A streamlined, locally-hosted web application for managing student housing operations — built with ASP.NET Core 8.0 MVC.
+> A premium, full-scale management ecosystem for student housing — engineered with a focus on modern aesthetics, robust security, and operational efficiency.
 
-![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=flat-square&logo=dotnet)
-![C#](https://img.shields.io/badge/C%23-ASP.NET_Core_MVC-239120?style=flat-square&logo=csharp)
-![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?style=flat-square&logo=sqlite)
-![Bootstrap](https://img.shields.io/badge/UI-Bootstrap_5-7952B3?style=flat-square&logo=bootstrap)
-![License](https://img.shields.io/badge/License-Academic-blue?style=flat-square)
+![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet)
+![C#](https://img.shields.io/badge/C%23-ASP.NET_Core_MVC-239120?style=for-the-badge&logo=csharp)
+![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite)
+![Bootstrap](https://img.shields.io/badge/UI-Bootstrap_5-7952B3?style=for-the-badge&logo=bootstrap)
+![UI](https://img.shields.io/badge/Design-Premium_Glassmorphism-FFD166?style=for-the-badge)
 
 ---
 
 ## 📋 Table of Contents
 
-- [About](#about)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Database Schema](#database-schema)
-- [Getting Started](#getting-started)
-- [User Roles](#user-roles)
-- [Project Structure](#project-structure)
-- [Authors](#authors)
+- [✨ About](#-about)
+- [🚀 Key Features](#-key-features)
+- [🎨 Modern Aesthetics](#-modern-aesthetics)
+- [🛠 Tech Stack](#-tech-stack)
+- [🏗 Architecture](#-architecture)
+- [📊 Database Schema](#-database-schema)
+- [📂 Project Structure](#-project-structure)
+- [👥 User Roles](#-user-roles)
+- [📦 Getting Started](#-getting-started)
+- [✍️ Authors](#️-authors)
 
 ---
 
-## About
+## ✨ About
 
-The **Dormitory Management System** is a full-stack web application developed for the SENG 321 – Web Development with Modern Frameworks course. It digitizes and simplifies paper-based operations of a student housing facility — covering room allocation, membership tracking, financial records, maintenance requests, and administrative reporting.
+The **Dormitory Management System** is a full-stack web application developed for the **SENG 321 – Web Development with Modern Frameworks** course. It digitizes and simplifies paper-based operations of a student housing facility — covering room allocation, membership tracking, financial records, maintenance requests, and administrative reporting.
 
-The system is intentionally designed to be **simple, maintainable, and fast** without sacrificing enterprise-level architecture standards.
+The system is designed to provide high-fidelity operational monitoring with a premium user experience, ensuring that institutional data is handled securely and efficiently.
 
 ---
 
-## Features
+## 🚀 Key Features
 
-| Module | Description |
+| Module | Technical Highlights |
 |---|---|
-| 🔐 **Authentication & RBAC** | Cookie-based auth with Admin / Staff / Student roles |
-| 🛏️ **Room Management** | CRUD for rooms, capacity tracking, occupancy status |
-| 🎓 **Student Membership** | Registration, room assignment, contract date tracking |
-| 💰 **Dues & Penalties** | Financial tracking with simple Paid/Unpaid toggle |
-| 🔧 **Maintenance Tickets** | Submit → Review → Resolve workflow |
-| 📄 **Document Storage** | Upload and link student documents (ID, contracts) |
-| 🔔 **Notifications** | In-app alerts for dues, penalties, and ticket updates |
-| 📊 **Dashboard & Reports** | Real-time metrics, occupancy rates, financial summaries |
-| 🕵️ **Audit Logs** | Timestamped activity tracking for accountability |
-| ⚙️ **System Settings** | Configurable due amounts, penalty fees, global variables |
+| 🆔 **7-Digit Identity** | Migrated from TC Identity to a custom, 7-digit **Dormitory Registration Number** system for enhanced privacy and internal tracking. |
+| 🔐 **Elite Auth & Security** | Cookie-based authentication with secure password hashing and a built-in **Forgot Password** simulation flow. |
+| 🛄 **Personnel Control** | Admin-only dashboard for managing staff and administrators, including a secure **cascading deletion** system. |
+| 📊 **Advanced Analytics** | Real-time financial monitoring (collected vs. overdue), occupancy rate visualization, and smart management insights. |
+| 🖨️ **Reporting Engine** | Export comprehensive reports to **Excel**, **PDF**, or high-fidelity **Print** formats with a single click. |
+| 🔧 **Maintenance 360** | Complete ticket lifecycle: Submission → Real-time Tracking → Resolution by Staff. |
+| 💰 **Financial Ledger** | Integrated dues and penalties tracking with localized currency and automated late fee configuration. |
+| 📄 **Document Storage** | Upload and link specific student documents such as Identity cards and contracts. |
+| 🔔 **Notifications** | Real-time in-app alerts for dues, penalties, and maintenance ticket updates. |
 
 ---
 
-## Tech Stack
+## 🎨 Modern Aesthetics
 
-```
-Backend   → C# / ASP.NET Core 8.0 MVC
-Database  → SQLite + Entity Framework Core (Code-First)
-Frontend  → Razor Views (.cshtml) + HTML5 + CSS3 + Bootstrap 5
-Auth      → ASP.NET Core Cookie-based Authentication
-IDE       → Visual Studio Code
-```
+We believe that enterprise software should be both powerful and beautiful:
 
----
-
-## Architecture
-
-This project follows a strict **MVC (Model-View-Controller)** layered architecture:
-
-```
-┌─────────────────────────────────────────────┐
-│                   Client                    │
-│           (Browser / Razor Views)           │
-└────────────────────┬────────────────────────┘
-                     │ HTTP Request
-┌────────────────────▼────────────────────────┐
-│              Controller Layer               │
-│   RBAC enforcement · Request routing        │
-│   Business logic · EF Core operations       │
-└────────────────────┬────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────┐
-│               Model Layer                   │
-│   Entities · ViewModels · Validation        │
-└────────────────────┬────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────┐
-│              Data Layer (SQLite)            │
-│   AppDbContext · EF Core Migrations         │
-└─────────────────────────────────────────────┘
-```
+*   **Interactive Mascots**: Custom-designed, animated character illustrations guiding users through Login and Registration.
+*   **Glassmorphism UI**: A sleek design language using frosted-glass effects, high-contrast typography (**Outfit Google Font**), and vibrant gradients.
+*   **Motion Design**: Fully responsive navigation with smooth transitions powered by **AOS (Animate On Scroll)** and CSS micro-animations.
+*   **Dynamic Dashboards**: Interactive charts and data visualizations powered by **Chart.js**.
 
 ---
 
-## Database Schema
-
-Key entities and their relationships:
-
-```
-Roles ──< Users ──< Students ──< DuesAndPenalties
-                              ──< Documents
-                              ──< Notifications
-          Users ──< Staff
-          Users ──< Admin
-
-Rooms ──< Students
-Rooms ──< MaintenanceTickets
-
-SystemSettings (global config)
-AuditLogs      (activity tracking)
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- Visual Studio Code (or any IDE)
-
-### Run Locally
+## 🛠 Tech Stack
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/DormitoryManagementSystem.git
-cd DormitoryManagementSystem
-
-# 2. Restore dependencies
-dotnet restore
-
-# 3. Apply database migrations
-dotnet ef database update
-
-# 4. Run the application
-dotnet run
+Backend   → C# / ASP.NET Core 8.0 MVC
+Database  → SQLite + Entity Framework Core (Code-First)
+Frontend  → Razor Views + HTML5 + CSS3 + Bootstrap 5
+Libraries → AOS (Animations), Chart.js (Analytics), Flatpickr (Dates)
+Auth      → ASP.NET Core Cookie-based Authentication
 ```
 
-The app will be available at `https://localhost:5001` (or as configured in `launchSettings.json`).
+---
 
-### Default Credentials
+## 🏗 Architecture
 
-After seeding (`DbSeeder.cs`), use the admin account to log in and create Staff/Student accounts through the Settings panel.
+The project follows a localized MVC architecture with automated database seeding and a centralized audit system.
+
+```mermaid
+graph TD
+    A[Client Browser] -->|HTTP Request| B(Razor Views)
+    B -->|Submit Form| C[Controller Layer]
+    C -->|Validate & Process| D[Model Layer]
+    D -->|LINQ to Entities| E[(SQLite Data Store)]
+    E -->|Fetch Records| D
+    D -->|Populate ViewModel| C
+    C -->|Render View| B
+    subgraph Security Layer
+        F[Cookie Auth Middleware]
+        G[RBAC Authorization]
+    end
+    subgraph Data Layer
+        H[AppDbContext]
+        I[DbSeeder]
+    end
+```
 
 ---
 
-## User Roles
+## 📊 Database Schema
 
-| Role | Capabilities |
-|---|---|
-| **Admin** | Full system access: user management, settings, audit logs, all CRUD |
-| **Staff** | Room management, student registration, dues/penalties, maintenance updates |
-| **Student** | View own membership, check dues, submit & track maintenance requests |
+Our relational schema is designed for data integrity and cascading accountability:
+
+*   **Roles ──< Users**: Core authentication layer.
+*   **Users ──< Admin / Staff**: Extended profiles for personnel.
+*   **Rooms ──< Students**: Occupancy-aware room allocation tracking.
+*   **Students ──< DuesAndPenalties**: Comprehensive financial ledger.
+*   **Students ──< Documents**: Repository for ID scans and contracts.
+*   **Rooms ──< MaintenanceTickets**: Facility maintenance tracking system.
+*   **AuditLogs**: Granular tracking of all administrative actions.
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```
 DormitoryManagementSystem/
-├── Controllers/          # Route handlers & business logic
-│   ├── AccountController.cs
-│   ├── DuesController.cs
-│   ├── HomeController.cs
-│   ├── MaintenanceController.cs
-│   ├── ReportsController.cs
-│   ├── RoomsController.cs
-│   ├── SettingsController.cs
-│   └── StudentsController.cs
-├── Models/               # Entities & ViewModels
-├── Views/                # Razor (.cshtml) templates
-│   ├── Account/
-│   ├── Dues/
-│   ├── Home/             # Dashboard & landing
-│   ├── Maintenance/
-│   ├── Reports/
-│   ├── Rooms/
-│   ├── Settings/
-│   └── Shared/
+├── Controllers/          # Route handlers & Business Logic
+│   ├── AccountController.cs    # Auth & Password Reset
+│   ├── DuesController.cs       # Financial management
+│   ├── ReportsController.cs    # Analytics & Exports (Excel/PDF)
+│   ├── RoomsController.cs      # Facility & Occupancy
+│   ├── SettingsController.cs   # System config & User Management
+│   └── StudentsController.cs   # Member operations
+├── Models/               # DB Entities & ViewModels
+├── Views/                # Razor (.cshtml) Design System
 ├── Data/
-│   ├── AppDbContext.cs   # EF Core context
-│   └── DbSeeder.cs       # Seed data
-├── Migrations/           # EF Core migration files
-├── Program.cs            # App entry point & DI config
-└── appsettings.json
+│   ├── AppDbContext.cs   # Data Layer Configuration
+│   └── DbSeeder.cs       # Automatic Initial Seeding
+├── wwwroot/              # Static Assets (CSS, JS, Mascots)
+├── Migrations/           # EF Core tracking files
+├── Program.cs            # Entry point, Middleware & Localization
+└── appsettings.json      # Connection strings
 ```
 
 ---
 
-## Authors
+## 👥 User Roles
 
-This project was developed as part of **SENG 321 – Web Development with Modern Frameworks** under the supervision of **Lect. Dr. Ruhi Taş**.
-
-| Name | Student ID |
+| Role | Domain Capabilities |
 |---|---|
-| Şeyma Bayram | 220208045 |
-| Mustafa Berkay Karagöz | 220208010 |
-| Kerim Taşkın | 220208927 |
+| **Admin** | Full system jurisdiction: manage all user accounts, update global dormitory settings, and access sensitive audit logs. |
+| **Staff** | Daily operations: register students, manage room occupancy, issue dues/penalties, and resolve maintenance tickets. |
+| **Student** | Personal portal: track personal dues, view own profile details, and submit room-specific maintenance requests. |
+
+---
+
+## 📦 Getting Started
+
+### Prerequisites
+*   [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+*   Visual Studio or VS Code
+
+### Installation
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/mmustafaberkaykrgz/DormitoryManagementSystem.git
+    cd DormitoryManagementSystem
+    ```
+2.  **Update Database**:
+    ```bash
+    dotnet ef database update
+    ```
+3.  **Run Application**:
+    ```bash
+    dotnet run
+    ```
+   *Note: On the first run, the system will automatically seed a default Admin account via `DbSeeder.cs`.*
+
+---
+
+## ✍️ Authors
+
+Developed as part of **SENG 321 – Web Development with Modern Frameworks** under the supervision of **Lect. Dr. Ruhi Taş**.
+
+| Author | Student ID |
+|---|---|
+| **Mustafa Berkay Karagöz** | 220208010 |
+| **Şeyma Bayram** | 220208045 |
+| **Kerim Taşkın** | 220208927 |
 
 ---
 
