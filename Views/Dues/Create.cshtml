@@ -40,8 +40,7 @@
                             <div class="input-group input-group-lg shadow-sm" style="border-radius: 10px; overflow: hidden;">
                                 <span class="input-group-text border-0 bg-warning text-dark fw-bold">₺</span>
                                 <input asp-for="Amount" type="number" step="0.01" class="form-control bg-light border-0" 
-                                       value="@(Model.Amount == 0 ? "" : Model.Amount.ToString("F2"))" 
-                                       placeholder="0.00" />
+                                       value="@(Model.Amount == 0 ? "" : Model.Amount.ToString("F2"))" />
                             </div>
                             <span asp-validation-for="Amount" class="text-danger small"></span>
                         </div>

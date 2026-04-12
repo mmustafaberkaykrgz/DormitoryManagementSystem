@@ -175,7 +175,7 @@
                                 <label asp-for="GlobalSettings.ContactPhone" class="form-label"></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-phone"></i></span>
-                                    <input asp-for="GlobalSettings.ContactPhone" class="form-control" placeholder="+90 5XX XXX XX XX" />
+                                    <input asp-for="GlobalSettings.ContactPhone" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-12">
@@ -189,7 +189,7 @@
                                 <label asp-for="GlobalSettings.ContactEmail" class="form-label"></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input asp-for="GlobalSettings.ContactEmail" class="form-control" placeholder="dormitory@example.com" />
+                                    <input asp-for="GlobalSettings.ContactEmail" class="form-control" />
                                 </div>
                             </div>
                             
@@ -202,8 +202,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">₺</span>
                                     <input asp-for="GlobalSettings.DefaultMonthlyDue" class="form-control" 
-                                           value="@(Model.GlobalSettings.DefaultMonthlyDue == 0 ? "" : Model.GlobalSettings.DefaultMonthlyDue.ToString("F2"))" 
-                                           placeholder="0.00" />
+                                           value="@(Model.GlobalSettings.DefaultMonthlyDue == 0 ? "" : Model.GlobalSettings.DefaultMonthlyDue.ToString("F2"))" />
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -211,8 +210,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">₺</span>
                                     <input asp-for="GlobalSettings.LatePenaltyFee" class="form-control" 
-                                           value="@(Model.GlobalSettings.LatePenaltyFee == 0 ? "" : Model.GlobalSettings.LatePenaltyFee.ToString("F2"))" 
-                                           placeholder="0.00" />
+                                           value="@(Model.GlobalSettings.LatePenaltyFee == 0 ? "" : Model.GlobalSettings.LatePenaltyFee.ToString("F2"))" />
                                 </div>
                             </div>
                             <div class="col-12 text-end mt-5">
