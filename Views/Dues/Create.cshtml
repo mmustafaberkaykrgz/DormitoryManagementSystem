@@ -17,19 +17,26 @@
                 <form asp-action="Create" novalidate>
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                    <!-- Student search with TC disambiguation -->
+                    <!-- Student search - Premium Select -->
                     <div class="form-group mb-4">
                         <label class="form-label fw-bold text-secondary">Target Student</label>
-                        <input id="studentSearchInput" class="form-control form-control-lg bg-light border-0" 
-                               list="studentListDues" 
-                               placeholder="Type name or Reg No to search..." 
-                               autocomplete="off" />
-                        <datalist id="studentListDues">
-                            @foreach (var s in students)
-                            {
-                                <option value="@s.Text" data-id="@s.Value">@s.Text</option>
-                            }
-                        </datalist>
+                        <div class="custom-select-container">
+                            <input id="studentSearchInput" class="form-control form-control-lg bg-light border-0"
+                                   placeholder="Type name or Reg No to search..."
+                                   autocomplete="off" />
+                            <div id="studentListDropdown" class="custom-select-dropdown">
+                                @foreach (var s in students)
+                                {
+                                    var parts = s.Text.Split(new[] { " (ID: " }, StringSplitOptions.None);
+                                    var studentName = parts.Length > 0 ? parts[0] : s.Text;
+                                    var studentReg  = parts.Length > 1 ? parts[1].TrimEnd(')') : s.Value;
+                                    <div class="custom-select-option" data-id="@s.Value" data-value="@s.Text">
+                                        <span class="room-number">@studentName</span>
+                                        <span class="room-info">ID: @studentReg</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                         <input type="hidden" asp-for="StudentId" id="studentIdHidden" />
                         <small class="text-muted">If two students share the same name, use the Registration Number to identify the correct one.</small>
                     </div>
@@ -68,16 +75,7 @@
 </div>
 
 <script>
-    document.getElementById('studentSearchInput').addEventListener('input', function () {
-        var val = this.value;
-        var options = document.getElementById('studentListDues').options;
-        var found = '';
-        for (var i = 0; i < options.length; i++) {
-            if (options[i].value === val) {
-                found = options[i].getAttribute('data-id');
-                break;
-            }
-        }
-        document.getElementById('studentIdHidden').value = found;
+    document.addEventListener('DOMContentLoaded', function () {
+        new PremiumSelect('studentSearchInput', 'studentListDropdown', 'studentIdHidden');
     });
 </script>

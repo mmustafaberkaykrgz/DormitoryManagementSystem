@@ -40,7 +40,10 @@ namespace DormitoryManagementSystem.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Create()
         {
-            var students = await _context.Students.AsNoTracking().ToListAsync();
+            var now = DateTime.Now;
+            var students = await _context.Students.AsNoTracking()
+                .Where(s => s.MembStartDate <= now && s.MembEndDate >= now)
+                .ToListAsync();
             ViewData["Students"] = students.Select(s => new SelectListItem 
             { 
                 Value = s.Id.ToString(), 
@@ -63,7 +66,10 @@ namespace DormitoryManagementSystem.Controllers
                 TempData["Success"] = "Due/Penalty record created successfully.";
                 return RedirectToAction(nameof(Index));
             }
-            var students = await _context.Students.AsNoTracking().ToListAsync();
+            var now2 = DateTime.Now;
+            var students = await _context.Students.AsNoTracking()
+                .Where(s => s.MembStartDate <= now2 && s.MembEndDate >= now2)
+                .ToListAsync();
             ViewData["Students"] = students.Select(s => new SelectListItem 
             { 
                 Value = s.Id.ToString(), 
