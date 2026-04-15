@@ -201,16 +201,16 @@
                                 <label asp-for="GlobalSettings.DefaultMonthlyDue" class="form-label"></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₺</span>
-                                    <input asp-for="GlobalSettings.DefaultMonthlyDue" class="form-control" 
-                                           value="@(Model.GlobalSettings.DefaultMonthlyDue == 0 ? "" : Model.GlobalSettings.DefaultMonthlyDue.ToString("F2"))" />
+                                    <input asp-for="GlobalSettings.DefaultMonthlyDue" type="text" class="form-control currency-input" 
+                                           value="@(Model.GlobalSettings.DefaultMonthlyDue == 0 ? "" : Model.GlobalSettings.DefaultMonthlyDue.ToString())" placeholder="0,00" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="GlobalSettings.LatePenaltyFee" class="form-label"></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₺</span>
-                                    <input asp-for="GlobalSettings.LatePenaltyFee" class="form-control" 
-                                           value="@(Model.GlobalSettings.LatePenaltyFee == 0 ? "" : Model.GlobalSettings.LatePenaltyFee.ToString("F2"))" />
+                                    <input asp-for="GlobalSettings.LatePenaltyFee" type="text" class="form-control currency-input" 
+                                           value="@(Model.GlobalSettings.LatePenaltyFee == 0 ? "" : Model.GlobalSettings.LatePenaltyFee.ToString())" placeholder="0,00" />
                                 </div>
                             </div>
                             <div class="col-12 text-end mt-5">

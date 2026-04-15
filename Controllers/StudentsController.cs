@@ -120,8 +120,8 @@ namespace DormitoryManagementSystem.Controllers
                     counter++;
                 }
 
-                // Auto-password: first 4 digits of Registration Number + "@Dorm"
-                var autoPassword = student.StudentId.Substring(0, 4) + "@Dorm";
+                // Auto-password: last 4 digits of Registration Number + "@Dorm"
+                var autoPassword = (student.StudentId.Length >= 4 ? student.StudentId.Substring(student.StudentId.Length - 4) : student.StudentId) + "@Dorm";
 
                 var newUser = new User
                 {
