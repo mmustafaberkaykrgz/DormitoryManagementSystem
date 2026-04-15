@@ -65,6 +65,7 @@ namespace DormitoryManagementSystem.Controllers
         {
             ViewBag.Rooms = _context.Rooms.Select(r => new {
                 Id = r.Id,
+                RoomNumber = r.RoomNumber,
                 DisplayText = r.RoomNumber + " - " + (r.Capacity - (r.Students != null ? r.Students.Count : 0)) + " available beds"
             }).ToList();
             return View();
@@ -143,6 +144,7 @@ namespace DormitoryManagementSystem.Controllers
 
             ViewBag.Rooms = _context.Rooms.Select(r => new {
                 Id = r.Id,
+                RoomNumber = r.RoomNumber,
                 DisplayText = r.RoomNumber + " - " + (r.Capacity - (r.Students != null ? r.Students.Count : 0)) + " available beds"
             }).ToList();
             return View(student);
@@ -156,6 +158,7 @@ namespace DormitoryManagementSystem.Controllers
             if (student == null) return NotFound();
             ViewBag.Rooms = _context.Rooms.Select(r => new {
                 Id = r.Id,
+                RoomNumber = r.RoomNumber,
                 DisplayText = r.RoomNumber + " - " + (r.Capacity - (r.Students != null ? r.Students.Count : 0)) + " available beds"
             }).ToList();
             return View(student);
@@ -206,6 +209,7 @@ namespace DormitoryManagementSystem.Controllers
 
             ViewBag.Rooms = _context.Rooms.Select(r => new {
                 Id = r.Id,
+                RoomNumber = r.RoomNumber,
                 DisplayText = r.RoomNumber + " - " + (r.Capacity - (r.Students != null ? r.Students.Count : 0)) + " available beds"
             }).ToList();
             return View(student);
