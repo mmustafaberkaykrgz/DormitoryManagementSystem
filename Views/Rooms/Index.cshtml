@@ -91,7 +91,8 @@
                         </td>
                         <td>
                             @{
-                                int occupied = room.Students != null ? room.Students.Count : 0;
+                                var nowRoom = DateTime.Now;
+                                int occupied = room.Students != null ? room.Students.Count(s => s.MembStartDate <= nowRoom && s.MembEndDate >= nowRoom) : 0;
                                 int available = room.Capacity - occupied;
                             }
                             <div style="display:flex;align-items:center;gap:8px;">
@@ -102,7 +103,7 @@
                                 <span class="badge-room" style="margin-left:4px;">@room.Capacity Beds</span>
                                 @if (available > 0)
                                 {
-                                    <span style="background:#f0fdf4;color:#166534;padding:3px 9px;border-radius:20px;font-size:0.73rem;font-weight:700;">@available free</span>
+                                    <span style="background:#f0fdf4;color:#166634;padding:3px 9px;border-radius:20px;font-size:0.73rem;font-weight:700;">@available free</span>
                                 }
                                 else
                                 {

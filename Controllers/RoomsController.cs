@@ -45,8 +45,9 @@ namespace DormitoryManagementSystem.Controllers
 
             // Global stats (all rooms, unaffected by pagination)
             var allRooms = await _context.Rooms.AsNoTracking().Include(r => r.Students).ToListAsync();
+            var now2 = DateTime.Now;
             ViewBag.GlobalTotalBeds     = allRooms.Sum(r => r.Capacity);
-            ViewBag.GlobalAvailableBeds = allRooms.Sum(r => r.Capacity - (r.Students != null ? r.Students.Count : 0));
+            ViewBag.GlobalAvailableBeds = allRooms.Sum(r => r.Capacity - (r.Students != null ? r.Students.Count(s => s.MembStartDate <= now2 && s.MembEndDate >= now2) : 0));
 
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);

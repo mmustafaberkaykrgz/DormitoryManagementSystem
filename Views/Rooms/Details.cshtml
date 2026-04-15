@@ -29,17 +29,22 @@
                     </div>
 
                     <div class="d-flex flex-column gap-3">
+                        @{
+                            var activeResidents = Model.Students?.Where(s => s.MembStartDate <= DateTime.Now && s.MembEndDate >= DateTime.Now).ToList() ?? new List<DormitoryManagementSystem.Models.Student>();
+                            int occupiedCount = activeResidents.Count;
+                            int availableCount = Model.Capacity - occupiedCount;
+                        }
                         <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background:#f8faff;">
                             <span class="text-muted fw-bold small">Total Capacity</span>
                             <span class="fw-bold">@Model.Capacity Beds</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background:#f0fdf4;">
                             <span class="text-muted fw-bold small">Occupied</span>
-                            <span class="fw-bold text-success">@(Model.Students?.Count ?? 0) Beds</span>
+                            <span class="fw-bold text-success">@occupiedCount Beds</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background:#fffaf0;">
                             <span class="text-muted fw-bold small">Available</span>
-                            <span class="fw-bold text-warning">@(Model.Capacity - (Model.Students?.Count ?? 0)) Beds</span>
+                            <span class="fw-bold text-warning">@availableCount Beds</span>
                         </div>
                     </div>
 
@@ -73,18 +78,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (Model.Students == null || !Model.Students.Any())
+                                    @if (!activeResidents.Any())
                                     {
                                         <tr>
                                             <td colspan="3" class="text-center py-5 text-muted">
                                                 <i class="bi bi-person-x opacity-25 fs-1 d-block mb-2"></i>
-                                                This room is currently empty.
+                                                This room has no active residents.
                                             </td>
                                         </tr>
                                     }
                                     else
                                     {
-                                        @foreach (var student in Model.Students)
+                                        @foreach (var student in activeResidents)
                                         {
                                             <tr>
                                                 <td>
