@@ -1,0 +1,91 @@
+/* Premium Custom Select Styling */
+
+.custom-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    display: none;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 15px;
+    margin-top: 5px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    animation: fadeInDown 0.2s ease-out;
+}
+
+.custom-select-dropdown.show {
+    display: block;
+}
+
+.custom-select-option {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.custom-select-option:last-child {
+    border-bottom: none;
+}
+
+.custom-select-option:hover {
+    background-color: #f0fdf4; /* Light green tint */
+    padding-left: 25px;
+    color: #198754; /* Success green */
+}
+
+.custom-select-option .room-number {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.custom-select-option .room-info {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.no-results {
+    padding: 15px;
+    text-align: center;
+    color: #adb5bd;
+    font-style: italic;
+}
+
+/* Custom Scrollbar */
+.custom-select-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-thumb {
+    background: #e9ecef;
+    border-radius: 10px;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #dee2e6;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

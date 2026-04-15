@@ -49,17 +49,21 @@
                     <div class="row g-4 mb-4">
                         <div class="col-md-12">
                             <label class="form-label fw-bold text-secondary">Assign to Room</label>
-                            <input id="roomSearchInput" class="form-control form-control-lg bg-light border-0" 
-                                   list="roomList" 
-                                   placeholder="Type room number to search..." 
-                                   autocomplete="off" 
-                                   required />
-                            <datalist id="roomList">
-                                @foreach (var r in ViewBag.Rooms)
-                                {
-                                    <option value="@r.RoomNumber" data-id="@r.Id">@r.DisplayText</option>
-                                }
-                            </datalist>
+                            <div class="custom-select-container">
+                                <input id="roomSearchInput" class="form-control form-control-lg bg-light border-0" 
+                                       placeholder="Type room number to search..." 
+                                       autocomplete="off" 
+                                       required />
+                                <div id="roomListDropdown" class="custom-select-dropdown">
+                                    @foreach (var r in ViewBag.Rooms)
+                                    {
+                                        <div class="custom-select-option" data-id="@r.Id" data-value="@r.RoomNumber">
+                                            <span class="room-number">@r.RoomNumber</span>
+                                            <span class="room-info">@(r.DisplayText.Replace(r.RoomNumber.ToString() + " - ", ""))</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                             <input type="hidden" asp-for="RoomId" id="roomIdHidden" />
                             <span asp-validation-for="RoomId" class="text-danger small"></span>
                         </div>
@@ -95,16 +99,7 @@
 </div>
 
 <script>
-    document.getElementById('roomSearchInput').addEventListener('input', function () {
-        var val = this.value;
-        var options = document.getElementById('roomList').options;
-        var found = '';
-        for (var i = 0; i < options.length; i++) {
-            if (options[i].value === val) {
-                found = options[i].getAttribute('data-id');
-                break;
-            }
-        }
-        document.getElementById('roomIdHidden').value = found;
+    document.addEventListener('DOMContentLoaded', function() {
+        new PremiumSelect('roomSearchInput', 'roomListDropdown', 'roomIdHidden');
     });
 </script>
