@@ -34,8 +34,15 @@
     <div style="background:white;border-radius:12px;padding:10px 18px;box-shadow:0 2px 12px rgba(26,31,94,0.07);display:flex;align-items:center;gap:10px;">
         <div style="width:36px;height:36px;border-radius:10px;background:#f0fdf4;color:#2D7D4A;display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="bi bi-people-fill"></i></div>
         <div>
-            <div style="font-size:1.1rem;font-weight:800;color:#166534;">@Model.Sum(r => r.Capacity)</div>
+            <div style="font-size:1.1rem;font-weight:800;color:#166534;">@ViewBag.GlobalTotalBeds</div>
             <div style="font-size:0.72rem;color:#94a3b8;font-weight:600;">TOTAL BEDS</div>
+        </div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:10px 18px;box-shadow:0 2px 12px rgba(26,31,94,0.07);display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:#fffbeb;color:#b45309;display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="bi bi-person-slash"></i></div>
+        <div>
+            <div style="font-size:1.1rem;font-weight:800;color:#92400e;">@ViewBag.GlobalAvailableBeds</div>
+            <div style="font-size:0.72rem;color:#94a3b8;font-weight:600;">AVAILABLE BEDS</div>
         </div>
     </div>
 </div>
@@ -83,12 +90,24 @@
                             </div>
                         </td>
                         <td>
+                            @{
+                                int occupied = room.Students != null ? room.Students.Count : 0;
+                                int available = room.Capacity - occupied;
+                            }
                             <div style="display:flex;align-items:center;gap:8px;">
                                 @for (int b = 0; b < room.Capacity; b++)
                                 {
-                                    <i class="bi bi-person-fill" style="color:#3A6BC7;font-size:0.95rem;"></i>
+                                    <i class="bi bi-person-fill" style="color:@(b < occupied ? "#3A6BC7" : "#cbd5e1");font-size:0.95rem;"></i>
                                 }
                                 <span class="badge-room" style="margin-left:4px;">@room.Capacity Beds</span>
+                                @if (available > 0)
+                                {
+                                    <span style="background:#f0fdf4;color:#166534;padding:3px 9px;border-radius:20px;font-size:0.73rem;font-weight:700;">@available free</span>
+                                }
+                                else
+                                {
+                                    <span style="background:#fef2f2;color:#991b1b;padding:3px 9px;border-radius:20px;font-size:0.73rem;font-weight:700;">Full</span>
+                                }
                             </div>
                         </td>
                         @if (User.IsInRole("Admin") || User.IsInRole("Staff"))

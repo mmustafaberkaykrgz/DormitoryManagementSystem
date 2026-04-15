@@ -52,6 +52,21 @@ namespace DormitoryManagementSystem.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
+            // ─── GLOBAL STATS (all students, unaffected by pagination or search) ───
+            var allStudentsQuery = _context.Students.AsNoTracking();
+            if (User.IsInRole("Student"))
+            {
+                var userIdStr2 = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdStr2, out int userId2))
+                    allStudentsQuery = allStudentsQuery.Where(s => s.UserId == userId2);
+            }
+            var now = DateTime.Now;
+            var allStudents = await allStudentsQuery.ToListAsync();
+            ViewBag.GlobalTotal   = allStudents.Count;
+            ViewBag.GlobalActive  = allStudents.Count(s => s.MembStartDate <= now && s.MembEndDate >= now);
+            ViewBag.GlobalPassive = allStudents.Count(s => s.MembStartDate > now);
+            ViewBag.GlobalExpired = allStudents.Count(s => s.MembEndDate < now);
+
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
             ViewBag.SearchTerm = search;

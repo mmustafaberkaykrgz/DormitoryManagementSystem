@@ -28,7 +28,7 @@ namespace DormitoryManagementSystem.Controllers
             }
 
             int pageSize = 10;
-            var query = _context.Rooms.AsNoTracking().AsQueryable();
+            var query = _context.Rooms.AsNoTracking().Include(r => r.Students).AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -42,6 +42,11 @@ namespace DormitoryManagementSystem.Controllers
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+
+            // Global stats (all rooms, unaffected by pagination)
+            var allRooms = await _context.Rooms.AsNoTracking().Include(r => r.Students).ToListAsync();
+            ViewBag.GlobalTotalBeds     = allRooms.Sum(r => r.Capacity);
+            ViewBag.GlobalAvailableBeds = allRooms.Sum(r => r.Capacity - (r.Students != null ? r.Students.Count : 0));
 
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
