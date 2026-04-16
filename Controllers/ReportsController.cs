@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using DormitoryManagementSystem.Data;
 using DormitoryManagementSystem.Models;
 using ClosedXML.Excel;
+using System.Globalization;
 
 namespace DormitoryManagementSystem.Controllers
 {
@@ -65,7 +66,7 @@ namespace DormitoryManagementSystem.Controllers
 
                 monthlyData.Add(new
                 {
-                    Month = month.ToString("MMM"),
+                    Month = month.ToString("MMM", CultureInfo.GetCultureInfo("en-US")),
                     Paid = paidAmount,
                     Unpaid = unpaidAmount
                 });
@@ -117,7 +118,7 @@ namespace DormitoryManagementSystem.Controllers
             else
                 ViewBag.ManagementAction = $"System metrics are stable. Maintain resident satisfaction and facility standards.";
 
-            ViewBag.DataAsOf = DateTime.Now.ToString("MMMM d, yyyy HH:mm:ss");
+            ViewBag.DataAsOf = DateTime.Now.ToString("MMMM d, yyyy HH:mm:ss", CultureInfo.GetCultureInfo("en-US"));
 
             return View();
         }
@@ -236,7 +237,7 @@ namespace DormitoryManagementSystem.Controllers
             ViewBag.OccupiedBeds  = occupiedBeds;
             ViewBag.OccupancyRate = totalCapacity > 0 ? Math.Round((double)occupiedBeds / totalCapacity * 100, 1) : 0;
 
-            ViewBag.DataAsOf = DateTime.Now.ToString("MMMM d, yyyy HH:mm");
+            ViewBag.DataAsOf = DateTime.Now.ToString("MMMM d, yyyy HH:mm", CultureInfo.GetCultureInfo("en-US"));
             ViewBag.ReportType = type;
 
             if (type == "overdue")

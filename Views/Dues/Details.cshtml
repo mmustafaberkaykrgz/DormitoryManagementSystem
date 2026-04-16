@@ -1,0 +1,94 @@
+@model DormitoryManagementSystem.Models.DuesAndPenalty
+@{
+    ViewData["Title"] = "Due / Penalty Details";
+}
+
+<div class="page-header" data-aos="fade-down">
+    <div>
+        <div class="page-title">Due / Penalty Details
+            <span>Full record information</span>
+        </div>
+    </div>
+    <a asp-action="Index" class="btn-primary-action" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<div data-aos="fade-up" data-aos-delay="80" style="max-width:680px;">
+    <div class="table-card">
+        <div class="table-card-header" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+            <div class="table-card-title">
+                <i class="bi bi-receipt"></i> Record #@Model.Id
+            </div>
+        </div>
+        <div style="padding:28px 28px;">
+
+            <!-- Student -->
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #f1f5f9;">
+                <div class="avatar-circle" style="width:48px;height:48px;border-radius:14px;font-size:1.2rem;background:linear-gradient(135deg,#d97706,#f59e0b);">
+                    @((Model.Student?.FullName ?? "?").Substring(0, 1).ToUpper())
+                </div>
+                <div>
+                    <div style="font-size:1.05rem;font-weight:800;color:#1A1F5E;">@(Model.Student?.FullName ?? "Unknown")</div>
+                    <div style="font-size:0.78rem;color:#94a3b8;margin-top:2px;">
+                        <i class="bi bi-door-closed me-1"></i>Room @(Model.Student?.Room?.RoomNumber ?? "N/A")
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fields -->
+            <table style="width:100%;border-collapse:separate;border-spacing:0 10px;">
+                <tr>
+                    <td style="width:35%;font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Description</td>
+                    <td style="font-size:0.9rem;font-weight:600;color:#1A1F5E;">@Model.Description</td>
+                </tr>
+                <tr>
+                    <td style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Amount</td>
+                    <td style="font-size:1rem;font-weight:800;color:@(Model.IsPaid ? "#166534" : "#991b1b");">₺@Model.Amount.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Due Date</td>
+                    <td style="font-size:0.9rem;font-weight:600;color:#1A1F5E;">@Model.DueDate.ToString("dd MMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</td>
+                </tr>
+                <tr>
+                    <td style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Status</td>
+                    <td>
+                        @if (Model.IsPaid)
+                        {
+                            <span class="badge-resolved" style="padding:4px 12px;font-size:0.75rem;"><i class="bi bi-check-circle-fill me-1"></i>Paid</span>
+                        }
+                        else
+                        {
+                            <span style="background:rgba(220,38,38,0.1);color:#991b1b;font-weight:700;padding:4px 12px;border-radius:20px;font-size:0.75rem;">
+                                <i class="bi bi-x-circle-fill me-1"></i>Unpaid
+                            </span>
+                        }
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Action Buttons -->
+            <div style="display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid #f1f5f9;flex-wrap:wrap;">
+                @if (User.IsInRole("Staff"))
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id"
+                       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:10px;font-size:0.82rem;font-weight:700;background:rgba(99,102,241,0.1);color:#4338ca;text-decoration:none;border:1px solid rgba(99,102,241,0.25);">
+                        <i class="bi bi-pencil-square"></i> Edit Record
+                    </a>
+                    @if (!Model.IsPaid)
+                    {
+                        <form asp-action="MarkAsPaid" asp-route-id="@Model.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn-action btn-resolve" style="padding:8px 18px;font-size:0.82rem;">
+                                <i class="bi bi-check2"></i> Mark as Paid
+                            </button>
+                        </form>
+                    }
+                }
+                <a asp-action="Index"
+                   style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:10px;font-size:0.82rem;font-weight:700;background:#f1f5f9;color:#64748b;text-decoration:none;">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

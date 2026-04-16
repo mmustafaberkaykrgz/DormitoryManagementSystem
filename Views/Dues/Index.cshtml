@@ -56,15 +56,12 @@
         <table class="table table-sm">
             <thead>
                 <tr>
-                    <th style="padding-left:20px; width: 25%;">Student Name</th>
-                    <th style="width: 10%;">Room</th>
-                    <th style="width: 15%;">Type</th>
-                    <th style="width: 15%;">Amount (₺)</th>
-                    <th style="width: 15%;">Status</th>
-                    @if (User.IsInRole("Staff"))
-                    {
-                        <th style="text-align:right;padding-right:20px; width: 20%;">Action</th>
-                    }
+                    <th style="padding-left:20px; width: 22%;">Student Name</th>
+                    <th style="width: 8%;">Room</th>
+                    <th style="width: 13%;">Type</th>
+                    <th style="width: 12%;">Amount (₺)</th>
+                    <th style="width: 13%;">Status</th>
+                    <th style="text-align:right;padding-right:20px; width: 32%;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,23 +112,38 @@
                                 </span>
                             }
                         </td>
-                        @if (User.IsInRole("Staff"))
-                        {
-                            <td style="text-align:right;padding-right:20px;">
-                                @if (!item.IsPaid)
+                        <td style="text-align:right;padding-right:20px;">
+                            <div style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+                                @if (User.IsInRole("Staff"))
                                 {
-                                    <form asp-action="MarkAsPaid" asp-route-id="@item.Id" method="post" style="display:inline;">
-                                        <button type="submit" class="btn-action btn-resolve" style="padding:6px 14px; font-size:0.75rem;">
-                                            <i class="bi bi-check2"></i> Mark Paid
-                                        </button>
-                                    </form>
+                                    <a asp-action="Edit" asp-route-id="@item.Id"
+                                       style="display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:8px;font-size:0.73rem;font-weight:700;background:rgba(99,102,241,0.1);color:#4338ca;text-decoration:none;border:1px solid rgba(99,102,241,0.25);transition:all .2s;"
+                                       onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='rgba(99,102,241,0.1)'">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
                                 }
-                                else
+                                <a asp-action="Details" asp-route-id="@item.Id"
+                                   style="display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:8px;font-size:0.73rem;font-weight:700;background:rgba(14,165,233,0.1);color:#0369a1;text-decoration:none;border:1px solid rgba(14,165,233,0.25);transition:all .2s;"
+                                   onmouseover="this.style.background='rgba(14,165,233,0.2)'" onmouseout="this.style.background='rgba(14,165,233,0.1)'">
+                                    <i class="bi bi-eye"></i> View Details
+                                </a>
+                                @if (User.IsInRole("Staff"))
                                 {
-                                    <span style="color:#94a3b8;font-size:0.75rem;"><i class="bi bi-check-all"></i> Settled</span>
+                                    @if (!item.IsPaid)
+                                    {
+                                        <form asp-action="MarkAsPaid" asp-route-id="@item.Id" method="post" style="display:inline;">
+                                            <button type="submit" class="btn-action btn-resolve" style="padding:5px 11px;font-size:0.73rem;">
+                                                <i class="bi bi-check2"></i> Mark Paid
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:#94a3b8;font-size:0.73rem;"><i class="bi bi-check-all"></i> Settled</span>
+                                    }
                                 }
-                            </td>
-                        }
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>

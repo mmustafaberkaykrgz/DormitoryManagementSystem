@@ -47,8 +47,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Set default culture to English (en-US)
-var supportedCultures = new[] { "en-US" };
+// Set default culture to Turkish (tr-TR) for correct number/currency formatting (12.500,00)
+var supportedCultures = new[] { "tr-TR" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture(supportedCultures[0])
     .AddSupportedCultures(supportedCultures)

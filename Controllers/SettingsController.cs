@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using DormitoryManagementSystem.Data;
 using DormitoryManagementSystem.Models;
 using System.Security.Claims;
+using System.Globalization;
 
 namespace DormitoryManagementSystem.Controllers
 {
@@ -31,8 +32,8 @@ namespace DormitoryManagementSystem.Controllers
                 viewModel.GlobalSettings.DormitoryAddress = dict.GetValueOrDefault("DormitoryAddress", "");
                 viewModel.GlobalSettings.ContactPhone = dict.GetValueOrDefault("ContactPhone", "");
                 viewModel.GlobalSettings.ContactEmail = dict.GetValueOrDefault("ContactEmail", "");
-                viewModel.GlobalSettings.DefaultMonthlyDue = decimal.TryParse(dict.GetValueOrDefault("DefaultMonthlyDue", "0"), out var d) ? d : 0;
-                viewModel.GlobalSettings.LatePenaltyFee = decimal.TryParse(dict.GetValueOrDefault("LatePenaltyFee", "0"), out var p) ? p : 0;
+                viewModel.GlobalSettings.DefaultMonthlyDue = decimal.TryParse(dict.GetValueOrDefault("DefaultMonthlyDue", "0"), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : 0;
+                viewModel.GlobalSettings.LatePenaltyFee = decimal.TryParse(dict.GetValueOrDefault("LatePenaltyFee", "0"), NumberStyles.Any, CultureInfo.InvariantCulture, out var p) ? p : 0;
 
                 // Load User Lists (Admins & Staff)
                 viewModel.AdminList = await _context.Admins.AsNoTracking().Include(a => a.User!).ThenInclude(u => u!.Role).ToListAsync();
@@ -103,6 +104,22 @@ namespace DormitoryManagementSystem.Controllers
                 ModelState.Remove(key);
             }
 
+            // Parse decimal fields manually from form to support tr-TR format (e.g. 14.500,00)
+            var trCulture = CultureInfo.GetCultureInfo("tr-TR");
+            var monthlyDueStr = Request.Form["GlobalSettings.DefaultMonthlyDue"].ToString().Trim().Replace(".", "");
+            var penaltyFeeStr = Request.Form["GlobalSettings.LatePenaltyFee"].ToString().Trim().Replace(".", "");
+
+            if (decimal.TryParse(monthlyDueStr, NumberStyles.Number, trCulture, out decimal parsedMonthlyDue))
+            {
+                model.GlobalSettings.DefaultMonthlyDue = parsedMonthlyDue;
+                ModelState.Remove("GlobalSettings.DefaultMonthlyDue");
+            }
+            if (decimal.TryParse(penaltyFeeStr, NumberStyles.Number, trCulture, out decimal parsedPenaltyFee))
+            {
+                model.GlobalSettings.LatePenaltyFee = parsedPenaltyFee;
+                ModelState.Remove("GlobalSettings.LatePenaltyFee");
+            }
+
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Please fill in all required fields correctly.";
@@ -111,12 +128,13 @@ namespace DormitoryManagementSystem.Controllers
 
             var keys = new Dictionary<string, string>
             {
-                { "DormitoryName",   model.GlobalSettings.DormitoryName   ?? string.Empty },
-                { "DormitoryAddress",model.GlobalSettings.DormitoryAddress ?? string.Empty },
-                { "ContactPhone",    model.GlobalSettings.ContactPhone     ?? string.Empty },
-                { "ContactEmail",    model.GlobalSettings.ContactEmail     ?? string.Empty },
-                { "DefaultMonthlyDue", model.GlobalSettings.DefaultMonthlyDue.ToString() },
-                { "LatePenaltyFee",    model.GlobalSettings.LatePenaltyFee.ToString()    }
+                { "DormitoryName",    model.GlobalSettings.DormitoryName    ?? string.Empty },
+                { "DormitoryAddress", model.GlobalSettings.DormitoryAddress  ?? string.Empty },
+                { "ContactPhone",     model.GlobalSettings.ContactPhone      ?? string.Empty },
+                { "ContactEmail",     model.GlobalSettings.ContactEmail      ?? string.Empty },
+                // Save with InvariantCulture so reading back is always consistent
+                { "DefaultMonthlyDue", model.GlobalSettings.DefaultMonthlyDue.ToString(CultureInfo.InvariantCulture) },
+                { "LatePenaltyFee",    model.GlobalSettings.LatePenaltyFee.ToString(CultureInfo.InvariantCulture)    }
             };
 
             foreach (var kvp in keys)

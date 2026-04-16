@@ -30,7 +30,7 @@
                     <p class="mb-3 font-monospace">@Model.UserId</p>
                     
                     <p class="text-secondary small fw-bold text-uppercase mb-1">Registration Date</p>
-                    <p class="mb-0"><i class="bi bi-clock-history"></i> @Model.MembStartDate.ToString("dd MMMM yyyy")</p>
+                    <p class="mb-0"><i class="bi bi-clock-history"></i> @Model.MembStartDate.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</p>
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                     <div class="col-md-6">
                         <label class="text-muted small fw-bold text-uppercase mb-1">Contract End Date</label>
                         <div class="form-control bg-light border-0">
-                            <i class="bi bi-calendar-event text-danger"></i> @Model.MembEndDate.ToString("dd MMMM yyyy")
+                            <i class="bi bi-calendar-event text-danger"></i> @Model.MembEndDate.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("en-US"))
                         </div>
                     </div>
                 </div>

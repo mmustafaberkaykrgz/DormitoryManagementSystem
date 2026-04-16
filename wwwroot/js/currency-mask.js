@@ -53,19 +53,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Intercept form submissions to clean the data
+    // The controller now parses tr-TR format directly (14.500,00), so no conversion needed.
+    // We only strip the thousands separator dots so the backend gets a clean value like "14500,00".
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', function (e) {
             const inputs = this.querySelectorAll('.currency-input');
             inputs.forEach(input => {
-                // Remove thousands separators (.) and change decimal comma (,) to dot (.)
-                // so the C# en-US model binder can parse it correctly.
-                let cleanValue = input.value.replace(/\./g, '').replace(',', '.');
-                
-                // Create a hidden input to hold the clean value if it's not already there
-                // Usually better to just swap the value temporarily if we're sure about submission
-                // but let's just update the input value itself right before submit.
-                input.value = cleanValue;
+                // Remove thousands separator dots only; keep comma as decimal separator
+                // e.g. "14.500,00" → "14500,00" (tr-TR compatible)
+                input.value = input.value.replace(/\./g, '');
             });
         });
     });

@@ -1,0 +1,96 @@
+@model DormitoryManagementSystem.Models.DuesAndPenalty
+@{
+    ViewData["Title"] = "Edit Due / Penalty";
+}
+
+<div class="page-header" data-aos="fade-down">
+    <div>
+        <div class="page-title">Edit Record
+            <span>Update due / penalty information</span>
+        </div>
+    </div>
+    <a asp-action="Index" class="btn-primary-action" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<div data-aos="fade-up" data-aos-delay="80" style="max-width:600px;">
+    <div class="table-card">
+        <div class="table-card-header" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+            <div class="table-card-title">
+                <i class="bi bi-pencil-square"></i> Editing Record #@Model.Id
+                &nbsp;—&nbsp;
+                <span style="font-weight:400;font-size:0.88rem;">@(Model.Student?.FullName ?? "Unknown")</span>
+            </div>
+        </div>
+        <div style="padding:28px;">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="StudentId" />
+
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Student</label>
+                    <div style="padding:10px 14px;background:#f8fafc;border-radius:10px;font-weight:600;color:#1A1F5E;font-size:0.9rem;border:1px solid #e2e8f0;">
+                        @(Model.Student?.FullName ?? "Unknown")
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label" style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3"
+                              style="border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.88rem;resize:none;"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Amount" class="form-label" style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;"></label>
+                    <div style="position:relative;">
+                        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#64748b;font-weight:700;">₺</span>
+                        <input name="Amount" type="text" class="form-control"
+                               value="@Model.Amount.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))"
+                               placeholder="0,00"
+                               style="border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.88rem;padding-left:28px;" />
+                    </div>
+                    <span asp-validation-for="Amount" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DueDate" class="form-label" style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;"></label>
+                    <input name="DueDate" type="text" class="form-control flatpickr-date"
+                           value="@Model.DueDate.ToString("yyyy-MM-dd")"
+                           placeholder="Select Due Date"
+                           style="border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.88rem;" />
+                    <span asp-validation-for="DueDate" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px;">Payment Status</label>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div class="form-check form-switch" style="margin:0;">
+                            <input class="form-check-input" type="checkbox" asp-for="IsPaid" id="isPaidToggle"
+                                   style="width:2.5em;height:1.4em;cursor:pointer;" />
+                        </div>
+                        <label for="isPaidToggle" style="font-size:0.88rem;font-weight:600;color:#1A1F5E;cursor:pointer;margin:0;">
+                            Mark as Paid
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <button type="submit" class="btn-primary-action" style="background:linear-gradient(135deg,#d97706,#f59e0b);padding:9px 22px;font-size:0.85rem;">
+                        <i class="bi bi-save me-1"></i> Save Changes
+                    </button>
+                    <a asp-action="Details" asp-route-id="@Model.Id"
+                       style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;font-size:0.85rem;font-weight:700;background:#f1f5f9;color:#64748b;text-decoration:none;">
+                        <i class="bi bi-eye"></i> View Details
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

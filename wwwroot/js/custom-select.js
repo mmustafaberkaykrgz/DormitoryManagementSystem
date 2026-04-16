@@ -9,7 +9,7 @@ class PremiumSelect {
         this.dropdown = document.getElementById(dropdownId);
         this.hidden = document.getElementById(hiddenId);
         this.options = this.dropdown.querySelectorAll('.custom-select-option');
-        
+
         if (this.input && this.dropdown) {
             this.init();
         }
@@ -41,7 +41,7 @@ class PremiumSelect {
         this.input.addEventListener('blur', () => {
             setTimeout(() => this.hideDropdown(), 200);
         });
-        
+
         // Prevent dropdown from closing when clicking inside it
         this.dropdown.addEventListener('mousedown', (e) => {
             e.preventDefault();
@@ -63,7 +63,7 @@ class PremiumSelect {
         this.options.forEach(option => {
             const text = option.textContent.toLowerCase();
             const value = option.getAttribute('data-value').toLowerCase();
-            
+
             if (text.includes(query) || value.includes(query)) {
                 option.style.display = 'block';
                 visibleCount++;
@@ -78,7 +78,7 @@ class PremiumSelect {
             if (!noResults) {
                 noResults = document.createElement('div');
                 noResults.className = 'no-results';
-                noResults.textContent = 'No matching rooms found';
+                noResults.textContent = 'No matching students found';
                 this.dropdown.appendChild(noResults);
             }
         } else if (noResults) {
@@ -91,7 +91,7 @@ class PremiumSelect {
         this.hidden.value = id;
         this.filterOptions(); // Reset visibility
         this.hideDropdown();
-        
+
         // Trigger generic "change" event for other listeners
         this.input.dispatchEvent(new Event('change'));
     }
