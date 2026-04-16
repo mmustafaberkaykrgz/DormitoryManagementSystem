@@ -3,6 +3,62 @@
     ViewData["Title"] = "Finances & Dues";
 }
 
+<style>
+    .overdue-wrap {
+        position: relative;
+        display: inline-flex;
+    }
+    .overdue-tooltip {
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        bottom: calc(100% + 10px);
+        right: 0;
+        width: 240px;
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 12px 14px;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+        z-index: 999;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        transform: translateY(6px);
+        border: 1px solid rgba(220,38,38,0.35);
+    }
+    .overdue-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        right: 16px;
+        border: 7px solid transparent;
+        border-top-color: #1e293b;
+    }
+    .overdue-wrap:hover .overdue-tooltip {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .overdue-tooltip-title {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: #f87171;
+        margin-bottom: 6px;
+        letter-spacing: 0.3px;
+    }
+    .overdue-tooltip-body {
+        font-size: 0.76rem;
+        color: #94a3b8;
+        line-height: 1.5;
+        text-align: justify;
+    }
+    .overdue-tooltip-body strong {
+        color: #e2e8f0;
+    }
+</style>
+
 <div class="page-header" data-aos="fade-down">
     <div>
         <div class="page-title">Financial Tracking
@@ -134,11 +190,33 @@
                                 {
                                     @if (!item.IsPaid)
                                     {
-                                        <form asp-action="MarkAsPaid" asp-route-id="@item.Id" method="post" style="display:inline;">
-                                            <button type="submit" class="btn-action btn-resolve" style="padding:5px 11px;font-size:0.73rem;">
-                                                <i class="bi bi-check2"></i> Mark Paid
-                                            </button>
-                                        </form>
+                                        @if (item.DueDate.Date < DateTime.Today)
+                                        {
+                                            @* Overdue: staff must create a penalty record first *@
+                                            <div class="overdue-wrap">
+                                                <span style="display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:8px;font-size:0.73rem;font-weight:700;background:rgba(220,38,38,0.08);color:#dc2626;border:1px solid rgba(220,38,38,0.2);cursor:default;">
+                                                    <i class="bi bi-clock-history"></i> Overdue
+                                                </span>
+                                                <div class="overdue-tooltip">
+                                                    <div class="overdue-tooltip-title">
+                                                        <i class="bi bi-exclamation-triangle-fill"></i>
+                                                        Payment Overdue
+                                                    </div>
+                                                    <div class="overdue-tooltip-body">
+                                                        Due date has passed. A <strong>late penalty fee</strong> applies for each overdue month.
+                                                        Please create a new penalty record before marking this as paid.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <form asp-action="MarkAsPaid" asp-route-id="@item.Id" method="post" style="display:inline;">
+                                                <button type="submit" class="btn-action btn-resolve" style="padding:5px 11px;font-size:0.73rem;">
+                                                    <i class="bi bi-check2"></i> Mark Paid
+                                                </button>
+                                            </form>
+                                        }
                                     }
                                     else
                                     {
