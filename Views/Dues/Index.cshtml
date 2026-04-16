@@ -57,6 +57,15 @@
     .overdue-tooltip-body strong {
         color: #e2e8f0;
     }
+    /* Allow tooltip to escape table card clipping */
+    .table-card,
+    .table-responsive {
+        overflow: visible !important;
+    }
+    .table-card-header {
+        border-radius: 16px 16px 0 0;
+        overflow: hidden;
+    }
 </style>
 
 <div class="page-header" data-aos="fade-down">
