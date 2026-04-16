@@ -19,8 +19,11 @@
 
 <!-- Finance Summary Chips -->
 @{
-    var totalPaid   = Model.Where(x => x.IsPaid).Sum(x => x.Amount);
-    var totalUnpaid = Model.Where(x => !x.IsPaid).Sum(x => x.Amount);
+    var totalPaid   = (decimal)(ViewBag.TotalPaid   ?? 0m);
+    var totalUnpaid = (decimal)(ViewBag.TotalUnpaid ?? 0m);
+    var totalCount  = (int)(ViewBag.TotalCount      ?? 0);
+    int currentPage = (int)(ViewBag.CurrentPage     ?? 1);
+    int totalPages  = (int)(ViewBag.TotalPages      ?? 1);
 }
 <div class="d-flex gap-3 mb-4 flex-wrap" data-aos="fade-up" data-aos-delay="50">
     <div style="background:white;border-radius:12px;padding:10px 18px;box-shadow:0 2px 12px rgba(26,31,94,0.07);display:flex;align-items:center;gap:10px;">
@@ -40,7 +43,7 @@
     <div style="background:white;border-radius:12px;padding:10px 18px;box-shadow:0 2px 12px rgba(26,31,94,0.07);display:flex;align-items:center;gap:10px;">
         <div style="width:36px;height:36px;border-radius:10px;background:#fffbeb;color:#d97706;display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="bi bi-receipt"></i></div>
         <div>
-            <div style="font-size:1.05rem;font-weight:800;color:#92400e;">@Model.Count()</div>
+            <div style="font-size:1.05rem;font-weight:800;color:#92400e;">@totalCount</div>
             <div style="font-size:0.72rem;color:#94a3b8;font-weight:600;">TOTAL RECORDS</div>
         </div>
     </div>
@@ -150,3 +153,63 @@
         </table>
     </div>
 </div>
+
+@* Pagination *@
+@if (totalPages > 1)
+{
+    <div class="d-flex justify-content-center align-items-center gap-2 mt-4" data-aos="fade-up" data-aos-delay="150">
+        @* Previous *@
+        @if (currentPage > 1)
+        {
+            <a asp-action="Index" asp-route-page="@(currentPage - 1)"
+               style="display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:10px;font-size:0.82rem;font-weight:700;background:white;color:#1A1F5E;text-decoration:none;border:1.5px solid #e2e8f0;box-shadow:0 2px 8px rgba(26,31,94,0.06);transition:all .2s;"
+               onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'">
+                <i class="bi bi-chevron-left"></i> Prev
+            </a>
+        }
+        else
+        {
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:10px;font-size:0.82rem;font-weight:700;background:#f8faff;color:#cbd5e1;border:1.5px solid #f1f5f9;">
+                <i class="bi bi-chevron-left"></i> Prev
+            </span>
+        }
+
+        @* Page numbers *@
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            if (i == currentPage)
+            {
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;font-size:0.85rem;font-weight:800;background:linear-gradient(135deg,#d97706,#f59e0b);color:white;box-shadow:0 4px 12px rgba(217,119,6,0.35);">
+                    @i
+                </span>
+            }
+            else
+            {
+                <a asp-action="Index" asp-route-page="@i"
+                   style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;font-size:0.85rem;font-weight:700;background:white;color:#475569;text-decoration:none;border:1.5px solid #e2e8f0;transition:all .2s;"
+                   onmouseover="this.style.borderColor='#d97706';this.style.color='#d97706'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#475569'">
+                    @i
+                </a>
+            }
+        }
+
+        @* Next *@
+        @if (currentPage < totalPages)
+        {
+            <a asp-action="Index" asp-route-page="@(currentPage + 1)"
+               style="display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:10px;font-size:0.82rem;font-weight:700;background:white;color:#1A1F5E;text-decoration:none;border:1.5px solid #e2e8f0;box-shadow:0 2px 8px rgba(26,31,94,0.06);transition:all .2s;"
+               onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'">
+                Next <i class="bi bi-chevron-right"></i>
+            </a>
+        }
+        else
+        {
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:10px;font-size:0.82rem;font-weight:700;background:#f8faff;color:#cbd5e1;border:1.5px solid #f1f5f9;">
+                Next <i class="bi bi-chevron-right"></i>
+            </span>
+        }
+    </div>
+    <div class="text-center mt-2" style="font-size:0.78rem;color:#94a3b8;font-weight:500;">
+        Page @currentPage of @totalPages &nbsp;·&nbsp; @totalCount records total
+    </div>
+}

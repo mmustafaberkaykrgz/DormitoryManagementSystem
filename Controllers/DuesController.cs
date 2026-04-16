@@ -19,9 +19,14 @@ namespace DormitoryManagementSystem.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var query = _context.DuesAndPenalties.AsNoTracking().Include(d => d.Student!).ThenInclude(s => s!.Room).AsQueryable();
+            const int pageSize = 10;
+
+            var query = _context.DuesAndPenalties.AsNoTracking()
+                .Include(d => d.Student!).ThenInclude(s => s!.Room)
+                .AsQueryable();
+
             if (User.IsInRole("Student"))
             {
                 var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -31,10 +36,30 @@ namespace DormitoryManagementSystem.Controllers
                     if (student != null)
                         query = query.Where(d => d.StudentId == student.Id);
                     else
-                        query = query.Where(d => false); // hide all if no profile
+                        query = query.Where(d => false);
                 }
             }
-            return View(await query.ToListAsync());
+
+            // Summary totals (all records, not just current page)
+            var allDues = await query.ToListAsync();
+            ViewBag.TotalPaid   = allDues.Where(x => x.IsPaid).Sum(x => x.Amount);
+            ViewBag.TotalUnpaid = allDues.Where(x => !x.IsPaid).Sum(x => x.Amount);
+            ViewBag.TotalCount  = allDues.Count;
+
+            // Pagination
+            int totalRecords = allDues.Count;
+            int totalPages   = (int)Math.Ceiling(totalRecords / (double)pageSize);
+            page = Math.Max(1, Math.Min(page, Math.Max(1, totalPages)));
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages  = totalPages;
+
+            var paged = allDues
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return View(paged);
         }
 
         // GET: Dues/Create
