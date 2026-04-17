@@ -263,7 +263,21 @@
         </div>
         <div>
             <div class="student-name">@ViewBag.StudentName</div>
-            <div class="student-meta"><i class="bi bi-door-open me-1"></i>Room <strong>@ViewBag.RoomNumber</strong> &nbsp;·&nbsp; <i class="bi bi-person-check me-1"></i>Active Resident</div>
+            <div class="student-meta">
+                <i class="bi bi-door-open me-1"></i>Room <strong>@ViewBag.RoomNumber</strong> &nbsp;&middot;&nbsp; 
+                @if (ViewBag.StudentStatus == "Active")
+                {
+                    <span style="color:#166534;font-weight:600;"><i class="bi bi-person-check me-1"></i>Active Resident</span>
+                }
+                else if (ViewBag.StudentStatus == "Passive")
+                {
+                    <span style="color:#d97706;font-weight:600;"><i class="bi bi-clock-fill me-1"></i>Passive Resident</span>
+                }
+                else
+                {
+                    <span style="color:#dc2626;font-weight:600;"><i class="bi bi-person-x-fill me-1"></i>Expired Resident</span>
+                }
+            </div>
         </div>
     </div>
 

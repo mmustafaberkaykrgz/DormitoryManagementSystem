@@ -45,6 +45,14 @@ public class HomeController : Controller
                     ViewBag.StudentName = student.FullName;
                     ViewBag.RoomNumber = student.Room?.RoomNumber ?? "N/A";
                     
+                    var now = DateTime.Now;
+                    if (student.MembStartDate > now)
+                        ViewBag.StudentStatus = "Passive";
+                    else if (student.MembEndDate >= now)
+                        ViewBag.StudentStatus = "Active";
+                    else
+                        ViewBag.StudentStatus = "Expired";
+                    
                     var dues = await _context.DuesAndPenalties.Where(d => d.StudentId == student.Id).ToListAsync();
                     ViewBag.TotalPaid = dues.Where(d => d.IsPaid).Sum(d => d.Amount);
                     ViewBag.TotalUnpaid = dues.Where(d => !d.IsPaid).Sum(d => d.Amount);

@@ -1,0 +1,50 @@
+@model DormitoryManagementSystem.Models.MaintenanceTicket
+@{
+    ViewData["Title"] = "Ticket Details";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-light rounded-pill px-4 shadow-sm fw-bold">
+        <i class="bi bi-arrow-left"></i> Back to Tickets
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+            <div class="card-body text-center p-5">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow" style="width: 100px; height: 100px; font-size: 3rem;">
+                    <i class="bi bi-tools"></i>
+                </div>
+                <h4 class="fw-bolder mb-1">Ticket #@Model.Id.ToString("D5")</h4>
+                
+                @if(Model.IsResolved) {
+                    <span class="badge bg-success rounded-pill px-4 py-2 fs-6 mb-3 mt-2"><i class="bi bi-check-circle-fill"></i> Resolved</span>
+                } else {
+                    <span class="badge bg-warning text-dark rounded-pill px-4 py-2 fs-6 mb-3 mt-2"><i class="bi bi-clock-fill"></i> Pending</span>
+                }
+
+                <div class="mt-4 pt-4 border-top text-start">
+                    <p class="text-secondary small fw-bold text-uppercase mb-1">Reporter</p>
+                    <p class="fw-bold text-primary mb-3"><i class="bi bi-person"></i> @(Model.Student?.FullName ?? "Unknown")</p>
+
+                    <p class="text-secondary small fw-bold text-uppercase mb-1">Room</p>
+                    <p class="mb-0 fw-bold"><i class="bi bi-door-open"></i> @(Model.Room?.RoomNumber ?? "N/A")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8 mb-4">
+        <div class="card border-0 shadow-sm" style="border-radius: 16px; min-height: 100%;">
+            <div class="card-header bg-white border-0 pt-4 pb-0 px-4">
+                <h5 class="fw-bolder" style="color: #000046;">Issue Description</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="p-4 bg-light rounded-3 shadow-sm border" style="font-size:1.05rem; line-height: 1.6; color:#334155; min-height: 150px;">
+                    @Model.Issue
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

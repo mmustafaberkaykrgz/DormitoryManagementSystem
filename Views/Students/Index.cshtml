@@ -18,6 +18,12 @@
         }
         @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
         {
+            @if (!string.IsNullOrEmpty(ViewBag.SearchTerm as string))
+            {
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                    <i class="bi bi-arrow-left me-2"></i> Back to Roster
+                </a>
+            }
             <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#searchStudentModal">
                 <i class="bi bi-search me-2"></i> Search Student
             </button>
