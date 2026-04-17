@@ -17,8 +17,9 @@ namespace DormitoryManagementSystem.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            int pageSize = 10;
             var query = _context.MaintenanceTickets.AsNoTracking().Include(m => m.Room).Include(m => m.Student).ThenInclude(s => s!.Room).AsQueryable();
             if (User.IsInRole("Student"))
             {
@@ -39,7 +40,24 @@ namespace DormitoryManagementSystem.Controllers
                     }
                 }
             }
-            return View(await query.OrderByDescending(m => m.Id).ToListAsync());
+
+            int totalItems = await query.CountAsync();
+            int pendingTickets = await query.CountAsync(t => !t.IsResolved);
+            int resolvedTickets = await query.CountAsync(t => t.IsResolved);
+
+            var tickets = await query
+                .OrderByDescending(m => m.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalItems > 0 ? (int)Math.Ceiling(totalItems / (double)pageSize) : 1;
+            ViewBag.TotalCount = totalItems;
+            ViewBag.PendingCount = pendingTickets;
+            ViewBag.ResolvedCount = resolvedTickets;
+
+            return View(tickets);
         }
 
         [Authorize(Roles = "Student")]
